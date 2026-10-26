@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Goals</title>
+<meta name="theme-color" content="#1f7a5c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="My Goals">
+
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1f3ef;--card:#fff;--ink:#1d2320;--mute:#5d6862;--line:#dde2dc;--acc:#1f7a5c;--acc-ink:#fff;--warn:#c4483a;--track:#e3e8e2;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141916;--card:#1c231f;--ink:#e8ede9;--mute:#9aa6a0;--line:#2b3430;--acc:#46b88f;--acc-ink:#0d1a14;--warn:#e47a6c;--track:#2b3430;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141916;--card:#1c231f;--ink:#e8ede9;--mute:#9aa6a0;--line:#2b3430;--acc:#46b88f;--acc-ink:#0d1a14;--warn:#e47a6c;--track:#2b3430;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:720px;margin:0 auto;padding:20px 16px 80px}
+h1{font-size:28px;font-weight:800;margin:6px 0 2px;letter-spacing:-.02em}
+.sub{color:var(--mute);margin:0 0 18px}
+nav{display:flex;gap:6px;background:var(--track);padding:4px;border-radius:12px;margin-bottom:18px}
+nav button{flex:1;border:0;background:none;color:var(--mute);font:600 15px inherit;font-family:inherit;padding:10px 6px;border-radius:9px;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row.sp{justify-content:space-between}
+.big{font-size:26px;font-weight:800;letter-spacing:-.02em}
+.mute{color:var(--mute);font-size:14px}
+.bar{height:12px;background:var(--track);border-radius:99px;overflow:hidden;margin:10px 0 6px}
+.bar i{display:block;height:100%;background:var(--acc);border-radius:99px;transition:width .4s}
+.eta{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--track);font-size:15px}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 10px;min-width:0}
+input[type=number]{width:120px}
+input.grow{flex:1;min-width:140px}
+.btn{font:600 15px inherit;font-family:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 14px;border-radius:9px;cursor:pointer}
+.btn.pri{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+.btn.sm{padding:6px 10px;font-size:13px}
+.btn.del{color:var(--warn)}
+.item{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.item input[type=checkbox]{width:22px;height:22px;accent-color:var(--acc);flex:none}
+.item .t{flex:1;min-width:0}
+.item.done .t b{text-decoration:line-through;color:var(--mute)}
+.tag{font-size:12px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--track);color:var(--mute);margin-right:4px}
+.tag.late{background:var(--warn);color:#fff}
+.tag.lec{background:var(--acc);color:var(--acc-ink)}
+.empty{color:var(--mute);text-align:center;padding:24px 8px}
+.log{margin-top:10px;font-size:13px;color:var(--mute)}
+.log div{display:flex;justify-content:space-between;padding:2px 0}
+.neg{color:var(--warn)}
+details summary{cursor:pointer;color:var(--mute);font-size:14px;margin-top:10px}
+</style>
+</head>
+<body>
+<main>
+  <h1>My Goals</h1>
+  <p class="sub" id="today"></p>
+  <p class="mute" id="sync" style="margin:-10px 0 14px;font-size:13px">Saved on this device. Use Backup to move your data.</p>
+  <nav role="tablist" id="tabs">
+    <button role="tab" data-tab="savings" aria-selected="true">Savings</button>
+    <button role="tab" data-tab="school" aria-selected="false">School</button>
+    <button role="tab" data-tab="errands" aria-selected="false">Errands</button>
+  </nav>
+  <div id="view"></div>
+  <div class="card"><div class="row sp"><div><b>Backup</b><div class="mute">Save a copy of everything, or restore from one.</div></div><div class="row"><button class="btn" id="exp">Export</button><button class="btn" id="impb">Import</button><input type="file" id="imp" accept="application/json,.json" hidden></div></div></div>
+</main>
+<script>
+(function(){
+var KEY="mygoals.v1", tab="savings";
+var S={goals:[],school:[],errands:[]};
+try{var raw=localStorage.getItem(KEY); if(raw){var p=JSON.parse(raw); if(p&&p.goals) S=p;}}catch(e){}
+var uid=null, dbr=null, pushT=null;
+function setSync(t){var el=document.getElementById("sync"); if(el)el.textContent=t;}
+function save(){S.updated=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} pushCloud();}
+function pushCloud(){
+  if(!dbr||!uid)return;
+  clearTimeout(pushT);
+  pushT=setTimeout(function(){
+    var snap=JSON.parse(JSON.stringify(S));
+    dbr.set(snap).then(function(){setSync("Synced to your account");}).catch(function(){setSync("Saved on this device. Cloud sync failed, it will retry on your next change.");});
+  },500);
+}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function kes(n){return "KES "+Math.round(n).toLocaleString("en-KE")}
+function iso(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function todayIso(){return iso(new Date())}
+function fmtDate(s){if(!s)return"";var d=new Date(s+"T00:00:00");return d.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})}
+document.getElementById("today").textContent=new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+
+function eta(g){
+  var rem=g.target-g.saved;
+  if(rem<=0)return "Goal reached. Well done!";
+  if(!g.monthly||g.monthly<=0)return "Set how much you save to see how long it will take.";
+  var wk=g.period==="week", n=Math.ceil(rem/g.monthly);
+  var d=new Date(); if(wk)d.setDate(d.getDate()+n*7); else d.setMonth(d.getMonth()+n);
+  var when=d.toLocaleDateString("en-GB",{day:wk?"numeric":undefined,month:"long",year:"numeric"});
+  var span=wk?(n+" week"+(n>1?"s":"")):(n>=12?(Math.floor(n/12)+" yr "+(n%12?n%12+" mo":"")):(n+" month"+(n>1?"s":"")));
+  var out="About "+span.trim()+" to go, around "+when+".";
+  if(g.deadline){var dl=new Date(g.deadline+"T00:00:00"); if(d>dl){var left=Math.max(1,Math.ceil((dl-new Date())/(wk?604800000:2629800000))); out+=" That is past your deadline. You would need about "+kes(rem/left)+(wk?" a week.":" a month.");} else out+=" On track for your deadline.";}
+  return out;
+}
+
+function savingsView(){
+  var h='<form class="card" data-form="goal"><div class="row"><input class="grow" name="name" placeholder="Goal name (e.g. Laptop)" required>'+
+  '<input type="number" name="target" placeholder="Target KES" min="1" required><input type="number" name="monthly" placeholder="Amount to save" min="0"><select name="period" aria-label="Saving period"><option value="week">per week</option><option value="month">per month</option></select>'+
+  '<input type="date" name="deadline" title="Deadline (optional)"><button class="btn pri">Add goal</button></div></form>';
+  if(!S.goals.length)h+='<div class="empty">No savings goals yet. Add one above to start tracking.</div>';
+  S.goals.forEach(function(g){
+    var pct=Math.max(0,Math.min(100,g.saved/g.target*100));
+    h+='<section class="card" data-id="'+g.id+'"><div class="row sp"><b>'+esc(g.name)+'</b><button class="btn sm del" data-act="delgoal">Delete</button></div>'+
+    '<div class="big">'+kes(g.saved)+'</div><div class="mute">of '+kes(g.target)+' ('+Math.round(pct)+'%)</div>'+
+    '<div class="bar"><i style="width:'+pct+'%"></i></div>'+
+    '<div class="eta">'+esc(eta(g))+'</div>'+
+    '<form class="row" data-form="tx" style="margin-top:12px"><input type="number" name="amt" placeholder="Amount" min="1" required><input class="grow" name="note" placeholder="Note (optional)">'+
+    '<button class="btn pri" data-kind="add">Add</button><button class="btn" data-kind="sub">Deduct</button></form>'+
+    '<div class="row" style="margin-top:10px"><span class="mute">Saving plan:</span><input type="number" data-act="monthly" value="'+(g.monthly||"")+'" placeholder="KES" style="width:110px"><select data-act="period" aria-label="Saving period"><option value="week"'+(g.period==="week"?" selected":"")+'>per week</option><option value="month"'+(g.period==="week"?"":" selected")+'>per month</option></select></div>';
+    if(g.log&&g.log.length){h+='<details><summary>History ('+g.log.length+')</summary><div class="log">'+g.log.slice().reverse().slice(0,15).map(function(l){return'<div><span>'+fmtDate(l.d)+(l.note?' · '+esc(l.note):'')+'</span><span class="'+(l.amt<0?'neg':'')+'">'+(l.amt<0?'−':'+')+Math.abs(l.amt).toLocaleString("en-KE")+'</span></div>'}).join("")+'</div></details>';}
+    h+='</section>';
+  });
+  return h;
+}
+
+function sortByDate(a,b){return (a.when||a.due||"9999").localeCompare(b.when||b.due||"9999")}
+function schoolView(){
+  var h='<form class="card" data-form="school"><div class="row"><select name="kind"><option value="assignment">Assignment</option><option value="lecture">Lecture</option></select>'+
+  '<input class="grow" name="title" placeholder="Title (e.g. Pygame scene)" required><input class="grow" name="course" placeholder="Course (e.g. BIT 2301)">'+
+  '<input type="date" name="when" required value="'+todayIso()+'"><button class="btn pri">Add</button></div></form>';
+  var open=S.school.filter(function(x){return!x.done}).sort(sortByDate), done=S.school.filter(function(x){return x.done}).sort(sortByDate).reverse();
+  if(!S.school.length)h+='<div class="empty">No lectures or assignments yet.</div>';
+  function row(x){var late=!x.done&&x.when<todayIso(),t=x.when===todayIso();
+    return'<div class="item'+(x.done?' done':'')+'" data-id="'+x.id+'"><input type="checkbox" data-act="toggle"'+(x.done?' checked':'')+' aria-label="Mark done">'+
+    '<div class="t"><b>'+esc(x.title)+'</b><div><span class="tag '+(x.kind==="lecture"?'lec':'')+'">'+(x.kind==="lecture"?"Lecture":"Assignment")+'</span>'+(x.course?'<span class="tag">'+esc(x.course)+'</span>':'')+
+    '<span class="mute">'+(t?"Today":fmtDate(x.when))+'</span>'+(late?' <span class="tag late">Overdue</span>':'')+'</div></div><button class="btn sm del" data-act="del">✕</button></div>';}
+  if(open.length)h+='<div class="card">'+open.map(row).join("")+'</div>';
+  if(done.length)h+='<details><summary>Completed ('+done.length+')</summary><div class="card">'+done.map(row).join("")+'</div></details>';
+  return h;
+}
+function errandsView(){
+  var h='<form class="card" data-form="errand"><div class="row"><input class="grow" name="title" placeholder="Errand (e.g. Pay Wi-Fi bill)" required><input type="date" name="due"><button class="btn pri">Add</button></div></form>';
+  var open=S.errands.filter(function(x){return!x.done}).sort(sortByDate), done=S.errands.filter(function(x){return x.done});
+  if(!S.errands.length)h+='<div class="empty">Nothing to run today. Add an errand above.</div>';
+  function row(x){var late=!x.done&&x.due&&x.due<todayIso();
+    return'<div class="item'+(x.done?' done':'')+'" data-id="'+x.id+'"><input type="checkbox" data-act="toggle"'+(x.done?' checked':'')+' aria-label="Mark done">'+
+    '<div class="t"><b>'+esc(x.title)+'</b><div class="mute">'+(x.due?fmtDate(x.due):"No date")+(late?' <span class="tag late">Overdue</span>':'')+'</div></div><button class="btn sm del" data-act="del">✕</button></div>';}
+  if(open.length)h+='<div class="card">'+open.map(row).join("")+'</div>';
+  if(done.length)h+='<details><summary>Done ('+done.length+')</summary><div class="card">'+done.map(row).join("")+'</div></details>';
+  return h;
+}
+var view=document.getElementById("view");
+function render(){
+  view.innerHTML=tab==="savings"?savingsView():tab==="school"?schoolView():errandsView();
+  Array.prototype.forEach.call(document.querySelectorAll("#tabs button"),function(b){b.setAttribute("aria-selected",b.dataset.tab===tab)});
+}
+document.getElementById("tabs").addEventListener("click",function(e){var b=e.target.closest("button");if(b){tab=b.dataset.tab;render();}});
+
+var lastKind="add";
+view.addEventListener("click",function(e){
+  var b=e.target.closest("button"); if(!b)return;
+  if(b.dataset.kind)lastKind=b.dataset.kind;
+  var a=b.dataset.act; if(!a)return;
+  var el=b.closest("[data-id]"), id=el&&el.dataset.id;
+  if(a==="delgoal"){if(confirm("Delete this goal and its history?")){S.goals=S.goals.filter(function(g){return g.id!==id});save();render();}}
+  if(a==="del"){var k=tab==="school"?"school":"errands";S[k]=S[k].filter(function(x){return x.id!==id});save();render();}
+});
+view.addEventListener("change",function(e){
+  var t=e.target,a=t.dataset.act; if(!a)return;
+  var el=t.closest("[data-id]"), id=el&&el.dataset.id;
+  if(a==="toggle"){var k=tab==="school"?"school":"errands";S[k].forEach(function(x){if(x.id===id)x.done=t.checked});save();render();}
+  if(a==="monthly"){S.goals.forEach(function(g){if(g.id===id)g.monthly=Math.max(0,parseFloat(t.value)||0)});save();render();}
+  if(a==="period"){S.goals.forEach(function(g){if(g.id===id)g.period=t.value});save();render();}
+});
+view.addEventListener("submit",function(e){
+  e.preventDefault();
+  var f=e.target,type=f.dataset.form,v=function(n){return(f.elements[n]||{}).value||""};
+  if(type==="goal"){S.goals.push({id:uid(),name:v("name").trim(),target:parseFloat(v("target")),saved:0,monthly:parseFloat(v("monthly"))||0,period:v("period")||"month",deadline:v("deadline"),log:[]});}
+  if(type==="tx"){var id=f.closest("[data-id]").dataset.id,amt=parseFloat(v("amt"));
+    S.goals.forEach(function(g){if(g.id!==id)return;var d=lastKind==="sub"?-amt:amt;if(g.saved+d<0)d=-g.saved;g.saved+=d;g.log.push({d:todayIso(),amt:d,note:v("note").trim()});});}
+  if(type==="school"){S.school.push({id:uid(),kind:v("kind"),title:v("title").trim(),course:v("course").trim(),when:v("when"),done:false});}
+  if(type==="errand"){S.errands.push({id:uid(),title:v("title").trim(),due:v("due"),done:false});}
+  save();render();
+});
+render();
+function valid(r){return r&&Array.isArray(r.goals)&&Array.isArray(r.school)&&Array.isArray(r.errands)}
+function hasData(){return S.goals.length||S.school.length||S.errands.length}
+function adopt(r){
+  S={goals:r.goals,school:r.school,errands:r.errands,updated:r.updated||0};
+  try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+  var a=document.activeElement; if(a&&/INPUT|SELECT/.test(a.tagName)&&a.value&&a.closest("form"))return;
+  render();
+}
+document.getElementById("exp").addEventListener("click",function(){
+  try{
+    var blob=new Blob([JSON.stringify(S,null,2)],{type:"application/json"});
+    var url=URL.createObjectURL(blob), a=document.createElement("a");
+    a.href=url; a.download="my-goals-backup-"+todayIso()+".json";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){URL.revokeObjectURL(url)},1000);
+  }catch(e){alert("Could not save the backup. Try again.");}
+});
+document.getElementById("impb").addEventListener("click",function(){document.getElementById("imp").click()});
+document.getElementById("imp").addEventListener("change",function(e){
+  var f=e.target.files[0]; if(!f)return;
+  var rd=new FileReader();
+  rd.onload=function(){try{
+    var r=JSON.parse(rd.result); if(!valid(r))throw 0;
+    if(!confirm("Replace everything in the app with this backup?"))return;
+    S={goals:r.goals,school:r.school,errands:r.errands}; save(); render();
+  }catch(x){alert("That file is not a valid goals backup.");}};
+  rd.readAsText(f); e.target.value="";
+});
+})();
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}
+</script>
+</body>
+</html>
