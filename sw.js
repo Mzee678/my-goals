@@ -1,4 +1,4 @@
-const CACHE = "timely-v11";
+const CACHE = "timely-v16";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png"];
 
 self.addEventListener("install", (e) => {
@@ -45,10 +45,10 @@ const kes = (n) => "KES " + Math.round(n).toLocaleString("en-KE");
 
 function digest(S, now) {
   const t = iso(now), parts = [];
-  const sc = S.school.filter((x) => !x.done), er = S.errands.filter((x) => !x.done);
+  const sc = S.school.filter((x) => !x.done && x.kind !== "lecture"), er = S.errands.filter((x) => !x.done);
   const dS = sc.filter((x) => x.when === t), dE = er.filter((x) => x.due === t);
   const late = sc.filter((x) => x.when < t).length + er.filter((x) => x.due && x.due < t).length;
-  if (dS.length) parts.push(dS.map((x) => (x.kind === "lecture" ? "Lecture: " : "Due: ") + x.title).join(", "));
+  if (dS.length) parts.push(dS.map((x) => (({ cat: "CAT: ", exam: "Exam: " })[x.kind] || "Due: ") + x.title).join(", "));
   if (dE.length) parts.push("Errands: " + dE.map((x) => x.title).join(", "));
   if (late) parts.push(late + " overdue");
   const day = now.getDay(), dom = now.getDate();
