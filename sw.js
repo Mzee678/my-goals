@@ -1,4 +1,4 @@
-const CACHE = "timely-v6";
+const CACHE = "timely-v11";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png"];
 
 self.addEventListener("install", (e) => {
