@@ -86,6 +86,8 @@ details summary{cursor:pointer;color:var(--ink);font-weight:700;font-size:14px;m
   <div id="view"></div>
   <div class="stripe"></div>
   <div class="row"><button class="btn" id="exp" style="flex:1">Export</button><button class="btn" id="impb" style="flex:1">Import</button><input type="file" id="imp" accept="application/json,.json" hidden></div>
+  <div class="row" style="margin-top:10px"><button class="btn" id="rem" style="flex:1">Reminders: off</button><input type="time" id="remt" value="08:00" aria-label="Reminder time" style="width:130px"></div>
+  <p class="mute" id="remnote" style="margin:8px 0 0;font-size:13px"></p>
 <footer class="foot"><p class="slogan"><span class="chk"></span><b>PLAN. SAVE. REPEAT.</b></p></footer>
 </main>
 <script>
@@ -95,7 +97,7 @@ var S={goals:[],school:[],errands:[]};
 try{var raw=localStorage.getItem(KEY); if(raw){var p=JSON.parse(raw); if(p&&p.goals) S=p;}}catch(e){}
 var dbr=null, pushT=null;
 function setSync(t){var el=document.getElementById("sync"); if(el)el.textContent=t;}
-function save(){S.updated=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} pushCloud();}
+function save(){S.updated=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} idbSet("state",S); pushCloud();}
 function pushCloud(){
   if(!dbr)return;
   clearTimeout(pushT);
@@ -233,6 +235,54 @@ document.getElementById("imp").addEventListener("change",function(e){
   }catch(x){alert("That file is not a valid goals backup.");}};
   rd.readAsText(f); e.target.value="";
 });
+
+/* ---- Reminders ---- */
+function idb(){return new Promise(function(res,rej){var r=indexedDB.open("timely",1);r.onupgradeneeded=function(){r.result.createObjectStore("kv")};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}})}
+function idbSet(k,v){return idb().then(function(db){return new Promise(function(res){var t=db.transaction("kv","readwrite");t.objectStore("kv").put(v,k);t.oncomplete=res;t.onerror=res})}).catch(function(){})}
+function idbGet(k){return idb().then(function(db){return new Promise(function(res){var q=db.transaction("kv").objectStore("kv").get(k);q.onsuccess=function(){res(q.result)};q.onerror=function(){res(null)}})}).catch(function(){return null})}
+function digest(S,now){
+  var t=iso(now),parts=[];
+  var sc=S.school.filter(function(x){return!x.done}),er=S.errands.filter(function(x){return!x.done});
+  var dS=sc.filter(function(x){return x.when===t}),dE=er.filter(function(x){return x.due===t});
+  var late=sc.filter(function(x){return x.when<t}).length+er.filter(function(x){return x.due&&x.due<t}).length;
+  if(dS.length)parts.push(dS.map(function(x){return(x.kind==="lecture"?"Lecture: ":"Due: ")+x.title}).join(", "));
+  if(dE.length)parts.push("Errands: "+dE.map(function(x){return x.title}).join(", "));
+  if(late)parts.push(late+" overdue");
+  var day=now.getDay(),dom=now.getDate();
+  var nudge=S.goals.filter(function(g){return g.monthly>0&&g.saved<g.target&&((g.period==="week"&&day===1)||(g.period!=="week"&&dom===1))});
+  if(nudge.length)parts.push("Time to save: "+nudge.map(function(g){return kes(g.monthly)+" for "+g.name}).join(", "));
+  return parts.join(". ");
+}
+function loadR(){var d={on:false,time:"08:00",last:""};try{return Object.assign(d,JSON.parse(localStorage.getItem("timely.remind")||"{}"))}catch(e){return d}}
+function saveR(R){try{localStorage.setItem("timely.remind",JSON.stringify(R))}catch(e){} idbSet("remind",R);}
+function can(){return "Notification" in window&&"serviceWorker" in navigator}
+function note(t){document.getElementById("remnote").textContent=t}
+function paintR(){var R=loadR();document.getElementById("rem").textContent="Reminders: "+(R.on&&can()&&Notification.permission==="granted"?"on":"off");document.getElementById("remt").value=R.time}
+function show(body){return navigator.serviceWorker.ready.then(function(reg){return reg.showNotification("Timely",{body:body,icon:"icons/icon-192.png",badge:"icons/icon-192.png",tag:"timely-daily"})})}
+function periodic(on){if(!can())return;navigator.serviceWorker.ready.then(function(reg){if(!reg.periodicSync)return;if(on)reg.periodicSync.register("timely-daily",{minInterval:6*3600*1000}).catch(function(){});else reg.periodicSync.unregister("timely-daily").catch(function(){})})}
+async function checkReminders(){
+  var R=loadR(); if(!R.on||!can()||Notification.permission!=="granted")return;
+  var now=new Date(),hm=String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
+  var t=todayIso(); if(R.last===t||hm<R.time)return;
+  var stored=await idbGet("remind"); if(stored&&stored.last===t){R.last=t;saveR(R);return}
+  R.last=t; saveR(R);
+  var body=digest(S,now); if(body)show(body);
+}
+document.getElementById("rem").addEventListener("click",function(){
+  if(!can()){note("This browser does not support notifications.");return}
+  var R=loadR();
+  if(R.on){R.on=false;saveR(R);periodic(false);note("");paintR();return}
+  Notification.requestPermission().then(function(p){
+    if(p!=="granted"){note("Notifications are blocked. Allow them in the site settings of your browser, then try again.");paintR();return}
+    note(""); R.on=true; R.last=todayIso(); saveR(R); periodic(true); paintR();
+    var d=digest(S,new Date());
+    show("Daily summary is on for "+R.time+"."+(d?" Today: "+d:" Nothing due today."));
+  });
+});
+document.getElementById("remt").addEventListener("change",function(e){var R=loadR();R.time=e.target.value||"08:00";saveR(R)});
+document.addEventListener("visibilitychange",function(){if(!document.hidden)checkReminders()});
+setInterval(checkReminders,60000);
+paintR(); idbSet("state",S); idbSet("remind",loadR()); checkReminders();
 })();
 if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}
 </script>
