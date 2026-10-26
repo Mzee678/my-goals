@@ -1,4 +1,4 @@
-MY GOALS - install as a web app (GitHub Pages)
+TIMELY - install as a web app (GitHub Pages)
 
 1. Create a new GitHub repository (for example: my-goals). Public is fine.
 2. Upload ALL files in this folder, keeping the "icons" folder:
