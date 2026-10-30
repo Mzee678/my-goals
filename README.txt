@@ -26,3 +26,6 @@ GOOGLE SIGN-IN
 - Enable the Google provider in Supabase (Authentication > Sign In / Providers).
 - Add https://mzee678.github.io/my-goals/ under Authentication > URL Configuration > Redirect URLs.
 - The first time someone signs in, the app asks what to call them.
+
+PRIVACY POLICY
+- privacy.html must be uploaded next to index.html. Link: https://mzee678.github.io/my-goals/privacy.html
