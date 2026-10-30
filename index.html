@@ -114,6 +114,7 @@ details summary{cursor:pointer;color:var(--ink);font-weight:700;font-size:14px;m
 #hname{cursor:pointer}
 .gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%}
 .foot{margin-top:30px;text-align:center}
+.foot a{color:var(--mute);font-weight:700;text-underline-offset:3px}
 @media (prefers-reduced-motion:reduce){.bar i{transition:none}}
 </style>
 <script>try{var t=localStorage.getItem("timely.theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
@@ -155,7 +156,7 @@ details summary{cursor:pointer;color:var(--ink);font-weight:700;font-size:14px;m
 <div class="row"><button class="btn" id="exp" style="flex:1">Export</button><button class="btn" id="impb" style="flex:1">Import</button><input type="file" id="imp" accept="application/json,.json" hidden></div>
   <div class="row" style="margin-top:10px"><button class="btn" id="rem" style="flex:1">Reminders: off</button><input type="time" id="remt" value="08:00" aria-label="Reminder time" style="width:130px"></div>
   <p class="mute" id="remnote" style="margin:8px 0 0;font-size:13px"></p>
-<footer class="foot"><p class="slogan"><span class="chk"></span><b>PLAN. SAVE. REPEAT.</b></p></footer>
+<footer class="foot"><p class="slogan"><span class="chk"></span><b>PLAN. SAVE. REPEAT.</b></p><p class="mute" style="margin:14px 0 0"><a href="privacy.html">Privacy policy</a></p></footer>
 </main>
 <div id="nameov" hidden role="dialog" aria-modal="true" aria-labelledby="nmt"><div class="card"><b class="sec" id="nmt">Welcome to Timely</b><div class="mute" style="margin:4px 0 14px">What should we call you?</div><input id="nminp" maxlength="30" placeholder="Your name" autocomplete="given-name" style="width:100%"><div class="row" style="margin-top:14px"><button type="button" class="btn pri" id="nmok">Continue</button><button type="button" class="btn" id="nmx" hidden>Cancel</button></div></div></div>
 <div id="toast" role="status" aria-live="polite"></div>
