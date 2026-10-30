@@ -16,3 +16,13 @@ Notes
   the app) to back up or move data between devices.
 - To update the app later, replace index.html in the repo. If the old version
   still shows, change CACHE = "my-goals-v1" to "my-goals-v2" in sw.js.
+
+ACCOUNT SYNC (Supabase)
+- Tap "Sign in to sync" at the bottom of the app and create an account.
+- Sign in with the same email and password on your other devices.
+- The app works without an account too. Data then stays on the device.
+
+GOOGLE SIGN-IN
+- Enable the Google provider in Supabase (Authentication > Sign In / Providers).
+- Add https://mzee678.github.io/my-goals/ under Authentication > URL Configuration > Redirect URLs.
+- The first time someone signs in, the app asks what to call them.
