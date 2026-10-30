@@ -113,11 +113,20 @@ details summary{cursor:pointer;color:var(--ink);font-weight:700;font-size:14px;m
 #nameov .card{width:min(100%,380px);margin:0}
 #hname{cursor:pointer}
 .gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%}
+#gate{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:20px;background:var(--bg);overflow-y:auto}
+#gate[hidden],html[data-auth="1"] #gate{display:none}
+.gcard{width:min(100%,400px);margin:0;text-align:center}
+.glogo{display:block;margin:0 auto 14px;width:84px;height:84px;border-radius:24px;box-shadow:var(--out)}
+.gname{font-size:42px;font-weight:800;letter-spacing:-.03em;line-height:1;margin:0 0 8px}
+.gstack{display:grid;gap:12px}
+#gate input{width:100%}
+#gate .btn{width:100%;padding:14px 20px;font-size:15px}
 .foot{margin-top:30px;text-align:center}
 .foot a{color:var(--mute);font-weight:700;text-underline-offset:3px}
 @media (prefers-reduced-motion:reduce){.bar i{transition:none}}
 </style>
 <script>try{var t=localStorage.getItem("timely.theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script>try{if(localStorage.getItem("timely.session"))document.documentElement.setAttribute("data-auth","1")}catch(e){}</script>
 </head>
 <body>
 <main>
@@ -132,14 +141,6 @@ details summary{cursor:pointer;color:var(--ink);font-weight:700;font-size:14px;m
   <div id="view"></div>
   <div class="stripe"></div>
   <div class="card" id="authp" hidden>
-    <div id="authform">
-      <b class="sec">Sign in to sync</b>
-      <div class="mute" style="margin:4px 0 12px">Your data stays private and follows you to any device.</div>
-      <button type="button" class="btn gbtn" id="agg"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.5-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.9 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>Continue with Google</button>
-      <div class="mute" style="text-align:center;margin:12px 0">or use email</div>
-      <div class="row"><input class="grow" type="email" id="aem" placeholder="Email" autocomplete="email"><input class="grow" type="password" id="apw" placeholder="Password (6+ characters)" autocomplete="current-password"></div>
-      <div class="row" style="margin-top:12px"><button type="button" class="btn pri" id="asi">Sign in</button><button type="button" class="btn" id="asu">Create account</button><button type="button" class="btn" id="acx">Close</button></div>
-    </div>
     <div id="authin" hidden>
       <b class="sec">Signed in</b>
       <div class="mute" id="aemail" style="margin:4px 0 12px"></div>
@@ -158,6 +159,23 @@ details summary{cursor:pointer;color:var(--ink);font-weight:700;font-size:14px;m
   <p class="mute" id="remnote" style="margin:8px 0 0;font-size:13px"></p>
 <footer class="foot"><p class="slogan"><span class="chk"></span><b>PLAN. SAVE. REPEAT.</b></p><p class="mute" style="margin:14px 0 0"><a href="privacy.html">Privacy policy</a></p></footer>
 </main>
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gname">
+  <div class="card gcard">
+    <img class="glogo" src="icons/icon-192.png" alt="Timely logo">
+    <div class="gname" id="gname">Timely</div>
+    <p class="mute" style="margin:0 0 20px">Plan your savings, school and errands in one place.</p>
+    <div class="gstack">
+      <button type="button" class="btn gbtn" id="agg"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.5-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.9 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>Continue with Google</button>
+      <div class="mute">or use email</div>
+      <input type="email" id="aem" placeholder="Email" autocomplete="email">
+      <input type="password" id="apw" placeholder="Password (6+ characters)" autocomplete="current-password">
+      <button type="button" class="btn pri" id="asi">Sign in</button>
+      <button type="button" class="btn" id="asu">Create account</button>
+    </div>
+    <p class="mute" id="gmsg" style="margin:14px 0 0;font-size:13px;min-height:1em"></p>
+    <p class="mute" style="margin:10px 0 0;font-size:13px"><a href="privacy.html" style="color:var(--mute);font-weight:700">Privacy policy</a></p>
+  </div>
+</div>
 <div id="nameov" hidden role="dialog" aria-modal="true" aria-labelledby="nmt"><div class="card"><b class="sec" id="nmt">Welcome to Timely</b><div class="mute" style="margin:4px 0 14px">What should we call you?</div><input id="nminp" maxlength="30" placeholder="Your name" autocomplete="given-name" style="width:100%"><div class="row" style="margin-top:14px"><button type="button" class="btn pri" id="nmok">Continue</button><button type="button" class="btn" id="nmx" hidden>Cancel</button></div></div></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
@@ -488,11 +506,13 @@ function sbRest(method,qs,body,prefer){
 }
 function pullCloud(){return sbRest("GET","?select=data&user_id=eq."+sess.user.id)}
 function pushNow(){return sbRest("POST","?on_conflict=user_id",{user_id:sess.user.id,data:JSON.parse(JSON.stringify(S)),updated_at:new Date().toISOString()},"resolution=merge-duplicates,return=minimal")}
-function setMsg(t){var m=document.getElementById("amsg");if(m)m.textContent=t||""}
+function setMsg(t){["amsg","gmsg"].forEach(function(i){var m=document.getElementById(i);if(m)m.textContent=t||""})}
 function setStat(s,detail){stat=s;if(detail!==undefined)setMsg(detail);paintAcct()}
 function paintAcct(){
   document.getElementById("acct").textContent=sess?(stat||"Signed in"):"Sign in to sync";
-  document.getElementById("authform").hidden=!!sess;
+  document.getElementById("gate").hidden=!!sess;
+  document.documentElement.toggleAttribute("data-auth",!!sess);
+  document.querySelector("main").inert=!sess;
   document.getElementById("authin").hidden=!sess;
   document.getElementById("aemail").textContent=sess?sess.user.email:"";
 }
@@ -537,15 +557,26 @@ function creds(){
   if(!em||pw.length<6){setMsg("Enter your email and a password of at least 6 characters.");return null}
   return {email:em,password:pw};
 }
-function authDone(j){saveSess(toSess(j));document.getElementById("apw").value="";setMsg("");paintAcct();syncNow()}
+function authDone(j){saveSess(toSess(j));document.getElementById("apw").value="";setMsg("");tab="today";editId=null;render();paintAcct();syncNow()}
 document.getElementById("acct").addEventListener("click",function(){var p=document.getElementById("authp");p.hidden=!p.hidden;paintAcct()});
-document.getElementById("acx").addEventListener("click",function(){document.getElementById("authp").hidden=true});
 document.getElementById("acx2").addEventListener("click",function(){document.getElementById("authp").hidden=true});
 document.getElementById("asi").addEventListener("click",function(){var c=creds();if(!c)return;setMsg("Signing in\u2026");sbAuth("token?grant_type=password",c).then(authDone).catch(function(e){setMsg(authErr(e))})});
 document.getElementById("asu").addEventListener("click",function(){var c=creds();if(!c)return;setMsg("Creating account\u2026");sbAuth("signup",c).then(function(j){if(j.access_token&&j.user)authDone(j);else setMsg("Account created. Check your email to confirm it, then tap Sign in.")}).catch(function(e){setMsg(authErr(e))})});
 document.getElementById("apw").addEventListener("keydown",function(e){if(e.key==="Enter")document.getElementById("asi").click()});
 document.getElementById("asn").addEventListener("click",syncNow);
-document.getElementById("aso").addEventListener("click",function(){saveSess(null);try{localStorage.removeItem(LKEY)}catch(e){}stat="";document.getElementById("achoice").hidden=true;paintAcct();setMsg("Signed out. Your data stays on this device.")});
+function clearLocal(){
+  S={goals:[],school:[],errands:[],name:"",updated:0};
+  try{localStorage.removeItem(KEY);localStorage.removeItem(AKEY)}catch(e){}
+  idbSet("state",S);tab="today";editId=null;render();paintAv();paintHero();
+}
+document.getElementById("aso").addEventListener("click",function(){
+  setMsg("Saving your latest changes\u2026");
+  (linked()?pushNow():Promise.resolve()).then(function(){
+    clearLocal();saveSess(null);try{localStorage.removeItem(LKEY)}catch(e){}
+    stat="";document.getElementById("achoice").hidden=true;document.getElementById("authp").hidden=true;
+    paintAcct();setMsg("");
+  }).catch(function(e){setMsg(e&&e.name==="TypeError"?"You are offline. Reconnect to sign out so your latest changes are saved.":"Could not save your latest changes. Try again.")});
+});
 document.getElementById("ach1").addEventListener("click",function(){setLinked();document.getElementById("achoice").hidden=true;adopt(pendingRemote);render();setStat("Synced","")});
 document.getElementById("ach2").addEventListener("click",function(){setLinked();document.getElementById("achoice").hidden=true;S.updated=Date.now();save();pushNow().then(function(){setStat("Synced","")}).catch(syncErr)});
 document.addEventListener("visibilitychange",function(){if(!document.hidden)syncNow()});
@@ -567,7 +598,7 @@ function openName(edit){
   setTimeout(function(){i.focus()},50);
 }
 function maybeAskName(){
-  if(S.name||!document.getElementById("nameov").hidden)return;
+  if(!sess||S.name||!document.getElementById("nameov").hidden)return;
   if(sess&&!syncedOnce)return;
   openName(false);
 }
@@ -587,18 +618,19 @@ function handleOAuth(){
   var h=location.hash||"";
   if(h.indexOf("access_token=")<0&&h.indexOf("error=")<0)return Promise.resolve();
   var p=new URLSearchParams(h.replace(/^#/,""));
+  if(h.indexOf("access_token=")>=0)setMsg("Signing you in\u2026");
   try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
-  if(p.get("error")){document.getElementById("authp").hidden=false;setMsg(p.get("error_description")||"Google sign-in was cancelled.");return Promise.resolve()}
+  if(p.get("error")){setMsg(p.get("error_description")||"Google sign-in was cancelled.");return Promise.resolve()}
   var at=p.get("access_token");if(!at)return Promise.resolve();
   var exp=parseInt(p.get("expires_at"),10)||Math.floor(Date.now()/1000)+(parseInt(p.get("expires_in"),10)||3600);
   return fetch(SBU+"/auth/v1/user",{headers:sbHeaders(at)}).then(function(r){return r.json()}).then(function(u){
     if(!u||!u.id)throw new Error((u&&(u.msg||u.message))||"Sign-in failed");
     saveSess({access_token:at,refresh_token:p.get("refresh_token"),expires_at:exp,user:{id:u.id,email:u.email}});
     var m=u.user_metadata||{};suggestName=String(m.full_name||m.name||"").split(" ")[0]||"";
-  }).catch(function(e){document.getElementById("authp").hidden=false;setMsg(authErr(e))});
+  }).catch(function(e){setMsg(authErr(e))});
 }
 paintHero();
-handleOAuth().then(function(){paintAcct();syncNow();if(!sess)maybeAskName()});
+handleOAuth().then(function(){if(sess)setMsg("");paintAcct();syncNow()});
 document.getElementById("exp").addEventListener("click",function(){
   try{
     var blob=new Blob([JSON.stringify(S,null,2)],{type:"application/json"});
