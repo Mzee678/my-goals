@@ -1,4 +1,4 @@
-const CACHE = "timely-v22";
+const CACHE = "timely-v24";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png"];
 
 self.addEventListener("install", (e) => {
@@ -80,4 +80,16 @@ self.addEventListener("notificationclick", (e) => {
       return clients.openWindow("./");
     })
   );
+});
+
+// Push reminders sent by the server while the app is closed
+self.addEventListener("push", (e) => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (x) { d = { body: e.data ? e.data.text() : "" }; }
+  e.waitUntil(self.registration.showNotification(d.title || "Timely", {
+    body: d.body || "",
+    icon: "icons/icon-192.png",
+    badge: "icons/icon-192.png",
+    tag: "timely-daily",
+  }));
 });
