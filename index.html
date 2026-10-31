@@ -127,6 +127,8 @@ details summary{cursor:pointer;color:var(--ink);font-weight:700;font-size:14px;m
 </style>
 <script>try{var t=localStorage.getItem("timely.theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <script>try{if(localStorage.getItem("timely.session"))document.documentElement.setAttribute("data-auth","1")}catch(e){}</script>
+<script>window.timelyTs=function(){window.__tsReady=true;if(window.__tsRender)window.__tsRender()}</script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=timelyTs" async defer></script>
 </head>
 <body>
 <main>
@@ -169,6 +171,7 @@ details summary{cursor:pointer;color:var(--ink);font-weight:700;font-size:14px;m
       <div class="mute">or use email</div>
       <input type="email" id="aem" placeholder="Email" autocomplete="email">
       <input type="password" id="apw" placeholder="Password (6+ characters)" autocomplete="current-password">
+      <div id="tsw"></div>
       <button type="button" class="btn pri" id="asi">Sign in</button>
       <button type="button" class="btn" id="asu">Create account</button>
     </div>
@@ -421,7 +424,7 @@ render();
 function valid(r){return r&&Array.isArray(r.goals)&&Array.isArray(r.school)&&Array.isArray(r.errands)}
 function hasData(){return S.goals.length||S.school.length||S.errands.length}
 function adopt(r){
-  S={goals:r.goals,school:r.school,errands:r.errands,name:r.name||S.name||"",updated:r.updated||0};paintHero();
+  S={goals:r.goals,school:r.school,errands:r.errands,name:r.name||S.name||"",updated:r.updated||0};lastSynced=r.updated||0;paintHero();
   try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
   var a=document.activeElement; if(a&&/INPUT|SELECT/.test(a.tagName)&&a.value&&a.closest("form"))return;
   render();
@@ -505,7 +508,8 @@ function sbRest(method,qs,body,prefer){
   });
 }
 function pullCloud(){return sbRest("GET","?select=data&user_id=eq."+sess.user.id)}
-function pushNow(){return sbRest("POST","?on_conflict=user_id",{user_id:sess.user.id,data:JSON.parse(JSON.stringify(S)),updated_at:new Date().toISOString()},"resolution=merge-duplicates,return=minimal")}
+var lastSynced=0;
+function pushNow(){var snap=JSON.parse(JSON.stringify(S)),u=S.updated||0;return sbRest("POST","?on_conflict=user_id",{user_id:sess.user.id,data:snap,updated_at:new Date().toISOString()},"resolution=merge-duplicates,return=minimal").then(function(r){lastSynced=Math.max(lastSynced,u);return r})}
 function setMsg(t){["amsg","gmsg"].forEach(function(i){var m=document.getElementById(i);if(m)m.textContent=t||""})}
 function setStat(s,detail){stat=s;if(detail!==undefined)setMsg(detail);paintAcct()}
 function paintAcct(){
@@ -540,7 +544,7 @@ function syncNow(){
     }
     if(valid(r)&&(r.updated||0)>(S.updated||0)){adopt(r);setStat("Synced","")}
     else if(!valid(r)||(S.updated||0)>(r.updated||0)){return pushNow().then(function(){setStat("Synced","")})}
-    else setStat("Synced","");
+    else{lastSynced=S.updated||0;setStat("Synced","")}
   }).catch(syncErr).then(function(){syncing=false;syncedOnce=true;maybeAskName()});
 }
 function authErr(e){
@@ -549,19 +553,33 @@ function authErr(e){
   if(/invalid login/i.test(m))return "Wrong email or password.";
   if(/already (been )?registered/i.test(m))return "That email already has an account. Tap Sign in.";
   if(/password/i.test(m)&&/(6|short|weak|least)/i.test(m))return "Use a password with at least 6 characters.";
+  if(/captcha/i.test(m))return "The security check failed. Please try again.";
   if(/rate limit|too many/i.test(m))return "Too many tries. Wait a few minutes and try again.";
   return m||"Something went wrong.";
 }
+/* ---- CAPTCHA (Cloudflare Turnstile) ---- */
+var TSK="0x4AAAAAAFtWXhDxF5nHawdO",tsTok="",tsId=null;
+function renderTs(){
+  if(tsId!==null||!window.turnstile||sess)return;
+  try{tsId=window.turnstile.render("#tsw",{sitekey:TSK,theme:"auto",size:"flexible",appearance:"interaction-only",
+    callback:function(t){tsTok=t},"expired-callback":function(){tsTok=""},"error-callback":function(){tsTok=""}})}catch(e){}
+}
+function resetTs(){tsTok="";try{if(window.turnstile&&tsId!==null)window.turnstile.reset(tsId)}catch(e){}}
+window.__tsRender=renderTs;
+if(window.__tsReady||window.turnstile)renderTs();
+setTimeout(function(){if(!sess&&tsId===null)setMsg("The security check could not load. Reload the page or continue with Google.")},9000);
 function creds(){
   var em=document.getElementById("aem").value.trim(),pw=document.getElementById("apw").value;
   if(!em||pw.length<6){setMsg("Enter your email and a password of at least 6 characters.");return null}
-  return {email:em,password:pw};
+  var c={email:em,password:pw};
+  if(TSK){if(!tsTok){setMsg("Please wait a moment for the security check to finish, then try again.");return null}c.gotrue_meta_security={captcha_token:tsTok}}
+  return c;
 }
 function authDone(j){saveSess(toSess(j));document.getElementById("apw").value="";setMsg("");tab="today";editId=null;render();paintAcct();syncNow()}
 document.getElementById("acct").addEventListener("click",function(){var p=document.getElementById("authp");p.hidden=!p.hidden;paintAcct()});
 document.getElementById("acx2").addEventListener("click",function(){document.getElementById("authp").hidden=true});
-document.getElementById("asi").addEventListener("click",function(){var c=creds();if(!c)return;setMsg("Signing in\u2026");sbAuth("token?grant_type=password",c).then(authDone).catch(function(e){setMsg(authErr(e))})});
-document.getElementById("asu").addEventListener("click",function(){var c=creds();if(!c)return;setMsg("Creating account\u2026");sbAuth("signup",c).then(function(j){if(j.access_token&&j.user)authDone(j);else setMsg("Account created. Check your email to confirm it, then tap Sign in.")}).catch(function(e){setMsg(authErr(e))})});
+document.getElementById("asi").addEventListener("click",function(){var c=creds();if(!c)return;setMsg("Signing in\u2026");sbAuth("token?grant_type=password",c).then(function(j){resetTs();return j},function(e){resetTs();throw e}).then(authDone).catch(function(e){setMsg(authErr(e))})});
+document.getElementById("asu").addEventListener("click",function(){var c=creds();if(!c)return;setMsg("Creating account\u2026");sbAuth("signup",c).then(function(j){resetTs();return j},function(e){resetTs();throw e}).then(function(j){if(j.access_token&&j.user)authDone(j);else setMsg("Account created. Check your email to confirm it, then tap Sign in.")}).catch(function(e){setMsg(authErr(e))})});
 document.getElementById("apw").addEventListener("keydown",function(e){if(e.key==="Enter")document.getElementById("asi").click()});
 document.getElementById("asn").addEventListener("click",syncNow);
 function clearLocal(){
@@ -569,13 +587,26 @@ function clearLocal(){
   try{localStorage.removeItem(KEY);localStorage.removeItem(AKEY)}catch(e){}
   idbSet("state",S);tab="today";editId=null;render();paintAv();paintHero();
 }
+var forceOut=false,forceT=null;
+function finishSignOut(){
+  var tok=sess&&sess.access_token;
+  try{fetch(SBU+"/auth/v1/logout",{method:"POST",headers:sbHeaders(tok)}).catch(function(){})}catch(e){}
+  clearLocal();saveSess(null);try{localStorage.removeItem(LKEY)}catch(e){}
+  stat="";forceOut=false;clearTimeout(forceT);lastSynced=0;
+  document.getElementById("achoice").hidden=true;document.getElementById("authp").hidden=true;
+  paintAcct();setMsg("");
+}
 document.getElementById("aso").addEventListener("click",function(){
+  if(forceOut){finishSignOut();return}
+  if(!linked()||(S.updated||0)<=lastSynced){finishSignOut();return}
   setMsg("Saving your latest changes\u2026");
-  (linked()?pushNow():Promise.resolve()).then(function(){
-    clearLocal();saveSess(null);try{localStorage.removeItem(LKEY)}catch(e){}
-    stat="";document.getElementById("achoice").hidden=true;document.getElementById("authp").hidden=true;
-    paintAcct();setMsg("");
-  }).catch(function(e){setMsg(e&&e.name==="TypeError"?"You are offline. Reconnect to sign out so your latest changes are saved.":"Could not save your latest changes. Try again.")});
+  var timer=new Promise(function(_,rej){setTimeout(function(){rej(new Error("timeout"))},8000)});
+  Promise.race([pushNow(),timer]).then(finishSignOut).catch(function(e){
+    if(!sess)return;
+    forceOut=true;clearTimeout(forceT);forceT=setTimeout(function(){forceOut=false},15000);
+    var why=e&&e.name==="TypeError"?"You are offline.":"Could not save your latest changes"+(e&&e.status?" (error "+e.status+").":".");
+    setMsg(why+" Tap Sign out again to sign out anyway. Changes made on this device since the last sync will be lost.");
+  });
 });
 document.getElementById("ach1").addEventListener("click",function(){setLinked();document.getElementById("achoice").hidden=true;adopt(pendingRemote);render();setStat("Synced","")});
 document.getElementById("ach2").addEventListener("click",function(){setLinked();document.getElementById("achoice").hidden=true;S.updated=Date.now();save();pushNow().then(function(){setStat("Synced","")}).catch(syncErr)});
@@ -612,7 +643,7 @@ document.getElementById("nmx").addEventListener("click",function(){document.getE
 var hn=document.getElementById("hname");
 hn.addEventListener("click",function(){openName(true)});
 hn.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();openName(true)}});
-function googleUrl(){return SBU+"/auth/v1/authorize?provider=google&redirect_to="+encodeURIComponent(location.origin+location.pathname)}
+function googleUrl(){return SBU+"/auth/v1/authorize?provider=google&prompt=select_account&redirect_to="+encodeURIComponent(location.origin+location.pathname)}
 document.getElementById("agg").addEventListener("click",function(){setMsg("Opening Google\u2026");location.href=googleUrl()});
 function handleOAuth(){
   var h=location.hash||"";
