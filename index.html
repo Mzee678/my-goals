@@ -770,7 +770,8 @@ document.getElementById("rem").addEventListener("click",function(){
       note(r&&r.ok?"":"Reminders are on, but the test message could not be sent. Check the server setup.");
     }).catch(function(e){
       periodic(true);
-      note("Server reminders are not available ("+String((e&&e.message)||"error").slice(0,70)+"). Reminders will only appear while the app is open.");
+      var em=String((e&&e.message)||"error");
+      note(/push service error/i.test(em)?"This browser blocked push messages. In Brave, open Settings, Privacy and security, turn on \u201cUse Google services for push messaging\u201d and restart. Until then, reminders only appear while the app is open.":"Server reminders are not available ("+em.slice(0,70)+"). Reminders will only appear while the app is open.");
       var d=digest(S,new Date());show("Daily summary is on for "+R.time+"."+(d?" Today: "+d:" Nothing due today."));
     });
   });
