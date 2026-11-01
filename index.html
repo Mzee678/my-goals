@@ -726,7 +726,7 @@ async function checkReminders(){
   var body=digest(S,now); if(body)show(body);
 }
 /* ---- Push reminders (work when the app is closed) ---- */
-var FN=SBU+"/functions/v1/reminders";
+var FN=SBU+"/functions/v1/super-action";
 function u8(b64){var p="=".repeat((4-b64.length%4)%4),b=(b64+p).replace(/-/g,"+").replace(/_/g,"/"),r=atob(b),o=new Uint8Array(r.length);for(var i=0;i<r.length;i++)o[i]=r.charCodeAt(i);return o}
 function tzName(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone||"Africa/Nairobi"}catch(e){return "Africa/Nairobi"}}
 function timePassed(hm){var n=new Date();return String(n.getHours()).padStart(2,"0")+":"+String(n.getMinutes()).padStart(2,"0")>=hm}
