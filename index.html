@@ -504,7 +504,7 @@ function sbRest(method,qs,body,prefer,tbl){
     return fetch(SBU+"/rest/v1/"+(tbl||"user_data")+qs,{method:method,headers:h,body:body?JSON.stringify(body):undefined});
   }).then(function(r){
     if(!r.ok)return r.text().then(function(t){var e=new Error(t);e.status=r.status;throw e});
-    return r.status===204?null:r.json();
+    return r.text().then(function(t){return t?JSON.parse(t):null});
   });
 }
 function pullCloud(){return sbRest("GET","?select=data&user_id=eq."+sess.user.id)}
@@ -745,7 +745,7 @@ function pushOn(R){
   }).then(function(sub){return saveSub(sub,R)});
 }
 function testPush(){
-  return token().then(function(t){return fetch(FN+"?action=test",{method:"POST",headers:{"Authorization":"Bearer "+t,"Content-Type":"application/json"},body:"{}"})}).then(function(r){return r.json()});
+  return token().then(function(t){return fetch(FN+"?action=test",{method:"POST",headers:{"Authorization":"Bearer "+t,"Content-Type":"application/json"},body:"{}"})}).then(function(r){return r.text().then(function(t){try{return JSON.parse(t)}catch(e){return {ok:false,err:"server replied "+r.status+(t?": "+t.slice(0,60):" with no content")}}})});
 }
 function pushOff(tok){
   if(!("serviceWorker" in navigator))return;
@@ -767,7 +767,7 @@ document.getElementById("rem").addEventListener("click",function(){
     if(p!=="granted"){note("Notifications are blocked. Allow them in the site settings of your browser, then try again.");paintR();return}
     note("Setting up reminders\u2026");R.on=true;R.push=false;R.last=todayIso();saveR(R);paintR();
     pushOn(R).then(function(){R.push=true;saveR(R);periodic(false);paintR();return testPush()}).then(function(r){
-      note(r&&r.ok?"":"Reminders are on, but the test message could not be sent. Check the server setup.");
+      note(r&&r.ok?"":"Reminders are on, but the test message could not be sent"+(r&&r.err?" ("+String(r.err).slice(0,100)+")":"")+".");
     }).catch(function(e){
       periodic(true);
       var em=String((e&&e.message)||"error");
