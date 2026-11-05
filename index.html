@@ -95,7 +95,7 @@ details summary{cursor:pointer;color:var(--ink);font-weight:700;font-size:14px;m
 .sv{padding:14px 0;border-bottom:1.5px solid var(--line)}
 .sv:last-child{border-bottom:0}
 .bar.mini{height:10px;padding:2px;margin:10px 0}
-#toast{display:flex;align-items:center;gap:16px;position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;pointer-events:none;z-index:50;width:max-content;max-width:min(92vw,420px);padding:14px 20px;border-radius:20px;background:var(--bg);color:var(--ink);box-shadow:var(--out);transition:opacity .25s,transform .25s}
+#toast{display:flex;align-items:center;gap:16px;position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;pointer-events:none;z-index:120;width:max-content;max-width:min(92vw,420px);padding:14px 20px;border-radius:20px;background:var(--bg);color:var(--ink);box-shadow:var(--out);transition:opacity .25s,transform .25s}
 #toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 #toast b{display:block;font-weight:800;font-size:16px}
 #toast span{display:block;margin-top:2px;color:var(--mute);font-size:14px;font-weight:600}
@@ -108,7 +108,7 @@ details summary{cursor:pointer;color:var(--ink);font-weight:700;font-size:14px;m
 .note{margin-top:3px;font-size:13px;font-weight:500;color:var(--mute)}
 .tbtn{flex:none;font:700 13px inherit;font-family:inherit;border:0;border-radius:99px;padding:8px 16px;background:var(--teal);color:#fff;cursor:pointer}
 #toast.celebrate .tbtn{background:#fff;color:#0f5a5c}
-#nameov{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:20px;background:rgba(20,18,14,.5)}
+#nameov{position:fixed;inset:0;z-index:95;display:grid;place-items:center;padding:20px;background:rgba(20,18,14,.5)}
 #nameov[hidden]{display:none}
 #nameov .card{width:min(100%,380px);margin:0}
 #hname{cursor:pointer}
@@ -121,6 +121,34 @@ details summary{cursor:pointer;color:var(--ink);font-weight:700;font-size:14px;m
 .gstack{display:grid;gap:12px}
 #gate input{width:100%}
 #gate .btn{width:100%;padding:14px 20px;font-size:15px}
+.ov{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:20px;background:rgba(20,18,14,.5);overflow-y:auto}
+.ov[hidden]{display:none}
+.ov .card{width:min(100%,400px);margin:0}
+.hbtns{margin-left:auto;display:flex;gap:10px;flex:none}
+.hbtns .tgl{margin-left:0}
+#settings{position:fixed;inset:0;z-index:70;background:var(--bg);overflow-y:auto}
+#settings[hidden]{display:none}
+.sethead{display:flex;align-items:center;gap:14px;padding:16px 18px;position:sticky;top:0;background:var(--bg);z-index:2;padding-top:calc(16px + env(safe-area-inset-top,0px))}
+.setbody{max-width:720px;margin:0 auto;padding:6px 18px calc(60px + env(safe-area-inset-bottom,0px))}
+.srow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0;border-bottom:1.5px solid var(--line);flex-wrap:wrap}
+.srow:last-child{border-bottom:0}
+.srow b{word-break:break-word}
+.setbody ul{margin:8px 0 12px;padding-left:20px}
+.setbody li{margin:5px 0;color:var(--ink)}
+.setbody a{color:var(--ink);font-weight:700;text-underline-offset:3px}
+textarea{font:inherit;font-weight:600;color:var(--ink);background:var(--bg);border:0;border-radius:13px;box-shadow:var(--in);padding:12px 14px;width:100%;min-height:90px;resize:vertical}
+.stars{display:flex;gap:4px;margin:8px 0 12px}
+.stars button{font-size:30px;line-height:1;background:none;border:0;color:var(--mute);opacity:.4;cursor:pointer;padding:2px 4px}
+.stars button.on{color:var(--teal);opacity:1}
+.rv{display:block}
+.instbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 16px;margin:0 0 16px;border-radius:20px;box-shadow:var(--in);text-align:left}
+.instbar[hidden]{display:none}
+.instt b{display:block;font-weight:800}
+.instt span{display:block;font-size:13px;font-weight:600;color:var(--mute);margin-top:2px}
+.instgo[hidden]{display:none}
+.linkbtn{background:none;border:0;color:var(--mute);font:700 13px inherit;font-family:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:6px}
+.dobbox[hidden]{display:none}
+.gcard .instbar{margin-bottom:14px}
 .foot{margin-top:30px;text-align:center}
 .foot a{color:var(--mute);font-weight:700;text-underline-offset:3px}
 @media (prefers-reduced-motion:reduce){.bar i{transition:none}}
@@ -129,11 +157,13 @@ details summary{cursor:pointer;color:var(--ink);font-weight:700;font-size:14px;m
 <script>try{if(localStorage.getItem("timely.session"))document.documentElement.setAttribute("data-auth","1")}catch(e){}</script>
 <script>window.timelyTs=function(){window.__tsReady=true;if(window.__tsRender)window.__tsRender()}</script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=timelyTs" async defer></script>
+<script>window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__bip=e;if(window.__bipCb)window.__bipCb()})</script>
 </head>
 <body>
 <main>
-  <header class="hero"><div class="avw"><button type="button" class="av" id="av" aria-label="Change profile picture"><span id="avt">E</span></button><button type="button" class="avx" id="avx" aria-label="Remove profile picture" hidden>×</button><input type="file" id="avf" accept="image/*" hidden></div><div class="who"><h1 id="hname" role="button" tabindex="0" title="Change name"><span class="hi">Welcome</span><span id="uname">Eric</span></h1><p class="sub" id="today"></p></div><button type="button" class="tgl" id="tgl" aria-label="Switch theme"></button></header>
+  <header class="hero"><div class="avw"><button type="button" class="av" id="av" aria-label="Change profile picture"><span id="avt">E</span></button><button type="button" class="avx" id="avx" aria-label="Remove profile picture" hidden>×</button><input type="file" id="avf" accept="image/*" hidden></div><div class="who"><h1 id="hname" role="button" tabindex="0" title="Change name"><span class="hi">Welcome</span><span id="uname">Eric</span></h1><p class="sub" id="today"></p></div><div class="hbtns"><button type="button" class="tgl" id="setbtn" aria-label="Settings"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button><button type="button" class="tgl" id="tgl" aria-label="Switch theme"></button></div></header>
   
+  <div class="instbar" id="inst" hidden><div class="instt"><b>Install Timely</b><span class="insttxt"></span></div><div class="row"><button type="button" class="btn pri sm instgo">Install</button><button type="button" class="btn sm instx">Not now</button></div></div>
   <nav role="tablist" id="tabs">
     <button role="tab" data-tab="today" aria-selected="true">Today</button>
     <button role="tab" data-tab="savings" aria-selected="false">Savings</button>
@@ -141,44 +171,89 @@ details summary{cursor:pointer;color:var(--ink);font-weight:700;font-size:14px;m
     <button role="tab" data-tab="errands" aria-selected="false">Errands</button>
   </nav>
   <div id="view"></div>
-  <div class="stripe"></div>
-  <div class="card" id="authp" hidden>
-    <div id="authin" hidden>
-      <b class="sec">Signed in</b>
-      <div class="mute" id="aemail" style="margin:4px 0 12px"></div>
-      <div class="row"><button type="button" class="btn pri" id="asn">Sync now</button><button type="button" class="btn" id="aso">Sign out</button><button type="button" class="btn" id="acx2">Close</button></div>
-    </div>
-    <div id="achoice" hidden style="margin-top:14px">
-      <div class="eta"><b>This account already has data</b><span>Which copy do you want to keep?</span></div>
-      <div class="row" style="margin-top:12px"><button type="button" class="btn pri" id="ach1">Use cloud data</button><button type="button" class="btn" id="ach2">Keep this device</button></div>
-    </div>
-    <p class="mute" id="amsg" style="margin:12px 0 0;font-size:13px"></p>
-  </div>
-  <div class="row" style="margin-bottom:10px"><button class="btn" id="acct" style="flex:1">Sign in to sync</button></div>
-  
-<div class="row"><button class="btn" id="exp" style="flex:1">Export</button><button class="btn" id="impb" style="flex:1">Import</button><input type="file" id="imp" accept="application/json,.json" hidden></div>
-  <div class="row" style="margin-top:10px"><button class="btn" id="rem" style="flex:1">Reminders: off</button><input type="time" id="remt" value="08:00" aria-label="Reminder time" style="width:130px"></div>
-  <p class="mute" id="remnote" style="margin:8px 0 0;font-size:13px"></p>
 <footer class="foot"><p class="slogan"><span class="chk"></span><b>PLAN. SAVE. REPEAT.</b></p><p class="mute" style="margin:14px 0 0"><a href="privacy.html">Privacy policy</a></p></footer>
 </main>
 <div id="gate" role="dialog" aria-modal="true" aria-labelledby="gname">
   <div class="card gcard">
     <img class="glogo" src="icons/icon-192.png" alt="Timely logo">
     <div class="gname" id="gname">Timely</div>
-    <p class="mute" style="margin:0 0 20px">Plan your savings, school and errands in one place.</p>
+    <p class="mute" style="margin:0 0 16px">Plan your savings, school and errands in one place.</p>
+    <div class="instbar" id="inst2" hidden><div class="instt"><b>Install Timely</b><span class="insttxt"></span></div><div class="row"><button type="button" class="btn pri sm instgo">Install</button><button type="button" class="btn sm instx">Not now</button></div></div>
     <div class="gstack">
       <button type="button" class="btn gbtn" id="agg"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.5-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.9 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>Continue with Google</button>
       <div class="mute">or use email</div>
       <input type="email" id="aem" placeholder="Email" autocomplete="email">
       <input type="password" id="apw" placeholder="Password (6+ characters)" autocomplete="current-password">
+      <div id="dobbox" class="dobbox" hidden>
+        <label class="mute" for="adob" style="display:block;text-align:left;margin-bottom:6px">Date of birth</label>
+        <input type="date" id="adob">
+        <div class="mute" style="font-size:12px;text-align:left;margin-top:6px">You must be 13 or older. We only use this to check your age.</div>
+      </div>
       <div id="tsw"></div>
       <button type="button" class="btn pri" id="asi">Sign in</button>
-      <button type="button" class="btn" id="asu">Create account</button>
+      <button type="button" class="btn pri" id="asu" hidden>Create account</button>
+      <button type="button" class="linkbtn" id="amode">New here? Create an account</button>
     </div>
     <p class="mute" id="gmsg" style="margin:14px 0 0;font-size:13px;min-height:1em"></p>
     <p class="mute" style="margin:10px 0 0;font-size:13px"><a href="privacy.html" style="color:var(--mute);font-weight:700">Privacy policy</a></p>
   </div>
 </div>
+<div id="settings" hidden role="dialog" aria-modal="true" aria-labelledby="sett">
+  <div class="sethead"><button type="button" class="btn sm" id="setback">&larr; Back</button><b class="sec" id="sett">Settings</b></div>
+  <div class="setbody">
+    <section class="card">
+      <b class="sec">Profile</b>
+      <div class="srow"><span class="mute">Name</span><span class="row"><b id="setname"></b><button type="button" class="btn sm" id="setnm">Edit</button></span></div>
+      <div class="srow"><span class="mute">Email</span><b id="setemail"></b></div>
+      <div class="srow"><span class="mute">Date of birth</span><b id="setdob"></b></div>
+      <div class="row" style="margin-top:12px"><button type="button" class="btn sm" id="setph">Change photo</button><button type="button" class="btn sm" id="setphx" hidden>Remove photo</button></div>
+    </section>
+    <section class="card">
+      <b class="sec">Notifications</b>
+      <div class="mute" style="margin:4px 0 12px">Get a daily summary of what is due and when to save.</div>
+      <div class="row"><button class="btn" id="rem" style="flex:1">Reminders: off</button><input type="time" id="remt" value="08:00" aria-label="Reminder time" style="width:130px"></div>
+      <p class="mute" id="remnote" style="margin:8px 0 0;font-size:13px"></p>
+    </section>
+    <section class="card">
+      <b class="sec">Privacy</b>
+      <ul>
+        <li>Only you can see your goals, school items and errands.</li>
+        <li>We never sell or share your data.</li>
+        <li>You can save a copy of your data or delete your account at any time.</li>
+      </ul>
+      <p style="margin:0 0 14px"><a href="privacy.html">Read the privacy policy</a></p>
+      <div class="mute" style="margin-bottom:8px">Your data</div>
+      <div class="row"><button class="btn" id="exp" style="flex:1">Export</button><button class="btn" id="impb" style="flex:1">Import</button><input type="file" id="imp" accept="application/json,.json" hidden></div>
+    </section>
+    <section class="card">
+      <b class="sec">Rate Timely</b>
+      <div class="mute" style="margin:4px 0 0">How are we doing? Your first name, rating and comment will be visible to other Timely users.</div>
+      <div class="stars" id="stars" role="radiogroup" aria-label="Your rating">
+        <button type="button" data-v="1" role="radio" aria-checked="false" aria-label="1 star">&#9733;</button><button type="button" data-v="2" role="radio" aria-checked="false" aria-label="2 stars">&#9733;</button><button type="button" data-v="3" role="radio" aria-checked="false" aria-label="3 stars">&#9733;</button><button type="button" data-v="4" role="radio" aria-checked="false" aria-label="4 stars">&#9733;</button><button type="button" data-v="5" role="radio" aria-checked="false" aria-label="5 stars">&#9733;</button>
+      </div>
+      <textarea id="rvtxt" maxlength="500" placeholder="Tell us what you think (optional)"></textarea>
+      <div class="row" style="margin-top:10px"><button type="button" class="btn pri" id="rvgo">Submit review</button><button type="button" class="btn sm del" id="rvdel" hidden>Remove my review</button></div>
+      <p class="mute" id="rvmsg" style="margin:8px 0 0;font-size:13px;min-height:1em"></p>
+      <div class="srow"><b id="rvsum">Loading reviews&hellip;</b></div>
+      <div id="rvlist"></div>
+    </section>
+    <section class="card">
+      <b class="sec">Account</b>
+      <div id="authin" hidden style="margin-top:6px">
+        <div class="srow"><span class="mute">Signed in as</span><b id="aemail"></b></div>
+        <div class="srow"><span class="mute">Sync</span><button type="button" class="btn sm" id="acct">Sign in to sync</button></div>
+      </div>
+      <div class="row" style="margin-top:14px"><button type="button" class="btn" id="setout">Log out</button><button type="button" class="btn del" id="setdel">Delete account</button></div>
+      <p class="mute" id="amsg" style="margin:12px 0 0;font-size:13px;min-height:1em"></p>
+    </section>
+  </div>
+</div>
+<div class="ov" id="dobov" hidden role="dialog" aria-modal="true" aria-labelledby="dobt"><div class="card"><b class="sec" id="dobt">Before you start</b><div class="mute" style="margin:4px 0 14px">Enter your date of birth. You must be 13 or older to use Timely. We only use it to check your age.</div><input type="date" id="dobinp" style="width:100%"><p class="mute" id="dobmsg" style="margin:10px 0 0;font-size:13px;min-height:1em"></p><div class="row" style="margin-top:10px"><button type="button" class="btn pri" id="dobok">Continue</button></div></div></div>
+<div class="ov" id="blockov" hidden role="dialog" aria-modal="true" aria-labelledby="blkt"><div class="card"><b class="sec" id="blkt">Timely is for ages 13 and over</b><div class="mute" style="margin:6px 0 14px">We can’t create an account for you, and we haven’t saved any of your information. Any account that was started has been removed.</div><button type="button" class="btn pri" id="blockok">OK</button></div></div>
+<div class="ov" id="byeov" hidden role="dialog" aria-modal="true" aria-labelledby="byet"><div class="card"><b class="sec" id="byet">We’re so sad to see you go</b><div class="mute" style="margin:6px 0 14px">Your goals, school items and errands are saved to your account, so everything will be waiting when you sign back in.</div><div class="row"><button type="button" class="btn pri" id="byestay">Stay</button><button type="button" class="btn" id="aso">Log out</button></div><p class="mute" id="bmsg" style="margin:12px 0 0;font-size:13px;min-height:1em"></p></div></div>
+<div class="ov" id="delov" hidden role="dialog" aria-modal="true" aria-labelledby="delt"><div class="card"><b class="sec" id="delt">Delete your account?</b><div class="mute" style="margin:6px 0 14px">This permanently deletes your account and everything stored with it: goals, deposits, school items, errands, reminders and your review. This can’t be undone.</div><input id="delinp" placeholder="Type DELETE to confirm" autocomplete="off" style="width:100%"><p class="mute" id="dmsg" style="margin:10px 0 0;font-size:13px;min-height:1em"></p><div class="row" style="margin-top:10px"><button type="button" class="btn" id="delno">Cancel</button><button type="button" class="btn del" id="deldo" disabled>Delete account</button></div></div></div>
+<div class="ov" id="achoice" hidden role="dialog" aria-modal="true"><div class="card"><div class="eta"><b>This account already has data</b><span>Which copy do you want to keep?</span></div><div class="row" style="margin-top:12px"><button type="button" class="btn pri" id="ach1">Use cloud data</button><button type="button" class="btn" id="ach2">Keep this device</button></div></div></div>
+<div id="authp" hidden><button type="button" id="acx2"></button></div>
 <div id="nameov" hidden role="dialog" aria-modal="true" aria-labelledby="nmt"><div class="card"><b class="sec" id="nmt">Welcome to Timely</b><div class="mute" style="margin:4px 0 14px">What should we call you?</div><input id="nminp" maxlength="30" placeholder="Your name" autocomplete="given-name" style="width:100%"><div class="row" style="margin-top:14px"><button type="button" class="btn pri" id="nmok">Continue</button><button type="button" class="btn" id="nmx" hidden>Cancel</button></div></div></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
@@ -258,7 +333,7 @@ var toastT=null;
 function hideToast(){clearTimeout(toastT);document.getElementById("toast").className=""}
 function toast(title,body,big,act,ms){
   var el=document.getElementById("toast");
-  el.innerHTML="<div><b>"+esc(title)+"</b><span>"+esc(body)+"</span></div>"+(act?'<button type="button" class="tbtn">'+esc(act.label)+"</button>":"");
+  el.innerHTML="<div><b>"+esc(title)+"</b>"+(body?"<span>"+esc(body)+"</span>":"")+"</div>"+(act?'<button type="button" class="tbtn">'+esc(act.label)+"</button>":"");
   if(act)el.querySelector(".tbtn").onclick=act.fn;
   el.className="show"+(big?" celebrate":"");
   clearTimeout(toastT);toastT=setTimeout(function(){el.className=""},ms||(big?6000:4200));
@@ -400,7 +475,7 @@ view.addEventListener("change",function(e){
   var t=e.target,a=t.dataset.act; if(!a)return;
   var el=t.closest("[data-id]"), id=el&&el.dataset.id;
   if(a==="kind"){var f=t.form,lec=t.value==="lecture";f.elements.when.hidden=lec;f.elements.when.required=!lec;f.elements.title.placeholder=lec?"Unit name (e.g. Computer Graphics)":"Title (e.g. Pygame scene)";return;}
-  if(a==="toggle"){var k=(el&&el.dataset.k)||(tab==="school"?"school":"errands"),adv=null;S[k].forEach(function(x){if(x.id!==id)return;if(k==="errands"&&x.repeat&&t.checked){var old=x.due;x.due=nextDue(x);adv={x:x,old:old}}else x.done=t.checked});save();render();if(adv)toast("Done! Repeats "+adv.x.repeat,"Next one is due "+fmtDate(adv.x.due)+".",false,{label:"Undo",fn:function(){adv.x.due=adv.old;save();render();hideToast()}},6000);}
+  if(a==="toggle"){var k=(el&&el.dataset.k)||(tab==="school"?"school":"errands"),adv=null;S[k].forEach(function(x){if(x.id!==id)return;if(k==="errands"&&x.repeat&&t.checked){var old=x.due;x.due=nextDue(x);adv={x:x,old:old}}else x.done=t.checked});save();render();if(adv)toast("Done! Repeats "+adv.x.repeat,"Next one is due "+fmtDate(adv.x.due)+".",false,{label:"Undo",fn:function(){adv.x.due=adv.old;save();render();hideToast()}},6000);else if(t.checked)ok("Marked done");}
   if(a==="monthly"){S.goals.forEach(function(g){if(g.id===id)g.monthly=Math.max(0,parseFloat(t.value)||0)});save();render();}
   if(a==="period"){S.goals.forEach(function(g){if(g.id===id)g.period=t.value});save();render();}
 });
@@ -410,21 +485,22 @@ function doForm(f){
   if(type==="tx"){var id=f.closest("[data-id]").dataset.id,amt=parseFloat(v("amt")),msg=null,sb=streak().n;
     S.goals.forEach(function(g){if(g.id!==id)return;var d=lastKind==="sub"?-amt:amt;if(g.saved+d<0)d=-g.saved;var b=g.saved/g.target*100;g.saved+=d;g.log.push({d:todayIso(),amt:d,note:v("note").trim()});var a=g.saved/g.target*100,m=[100,75,50,25].filter(function(x){return b<x&&a>=x})[0];if(d>0&&m)msg=m===100?["Goal reached!",g.name+" is fully funded. Amazing work.",true]:[m===75?"Almost there!":m===50?"Halfway there!":"Great start!",m+"% of "+g.name+" saved."];});
     save();render();
-    if(msg)toast(msg[0],msg[1],msg[2]);else{var sa=streak().n;if(sa>sb&&sa>=2)toast(sa+"-week streak!","You have saved "+sa+" weeks in a row. Keep it going.");}
+    if(msg)toast(msg[0],msg[1],msg[2]);else{var sa=streak().n;if(sa>sb&&sa>=2)toast(sa+"-week streak!","You have saved "+sa+" weeks in a row. Keep it going.");else ok(lastKind==="sub"?"Deduction saved":"Deposit added");}
     return;}
   if(type==="school"){S.school.push({id:uid(),kind:v("kind"),title:v("title").trim(),course:v("course").trim(),note:v("note").trim(),when:v("kind")==="lecture"?"":v("when"),done:false});}
   if(type==="errand"){var rp=v("repeat");S.errands.push({id:uid(),title:v("title").trim(),note:v("note").trim(),due:v("due")||(rp?todayIso():""),repeat:rp,done:false});}
   if(type==="goal-edit"){S.goals.forEach(function(g){if(g.id===f.dataset.id){g.name=v("name").trim()||g.name;g.target=parseFloat(v("target"))||g.target;g.monthly=parseFloat(v("monthly"))||0;g.period=v("period")||"month";g.deadline=v("deadline");}});editId=null;}
   if(type==="school-edit"){S.school.forEach(function(x){if(x.id===f.dataset.id){x.kind=v("kind");x.title=v("title").trim()||x.title;x.course=v("course").trim();x.note=v("note").trim();x.when=x.kind==="lecture"?"":v("when");if(x.kind==="lecture")x.done=false;}});editId=null;}
   if(type==="errand-edit"){S.errands.forEach(function(x){if(x.id===f.dataset.id){x.title=v("title").trim()||x.title;x.note=v("note").trim();x.repeat=v("repeat");x.due=v("due")||(x.repeat?todayIso():"");}});editId=null;}
-  save();render();
+  var doneMap={goal:"Goal added",school:"Item added",errand:"Errand added","goal-edit":"Goal updated","school-edit":"Item updated","errand-edit":"Errand updated"};
+  save();render();if(doneMap[type])ok(doneMap[type]);
 }
 view.addEventListener("submit",function(e){e.preventDefault();if(e.target.dataset.form)doForm(e.target)});
 render();
 function valid(r){return r&&Array.isArray(r.goals)&&Array.isArray(r.school)&&Array.isArray(r.errands)}
 function hasData(){return S.goals.length||S.school.length||S.errands.length}
 function adopt(r){
-  S={goals:r.goals,school:r.school,errands:r.errands,name:r.name||S.name||"",updated:r.updated||0};lastSynced=r.updated||0;paintHero();
+  S={goals:r.goals,school:r.school,errands:r.errands,name:r.name||S.name||"",dob:r.dob||S.dob||"",updated:r.updated||0};lastSynced=r.updated||0;paintHero();
   try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
   var a=document.activeElement; if(a&&/INPUT|SELECT/.test(a.tagName)&&a.value&&a.closest("form"))return;
   render();
@@ -437,7 +513,7 @@ function paintAv(){
   document.getElementById("avx").hidden=!u;
 }
 document.getElementById("av").addEventListener("click",function(){document.getElementById("avf").click()});
-document.getElementById("avx").addEventListener("click",function(){try{localStorage.removeItem(AKEY)}catch(e){}paintAv()});
+document.getElementById("avx").addEventListener("click",function(){try{localStorage.removeItem(AKEY)}catch(e){}paintAv();fillSettings();ok("Photo removed")});
 document.getElementById("avf").addEventListener("change",function(e){
   var f=e.target.files[0]; e.target.value=""; if(!f||!/^image\//.test(f.type))return;
   var rd=new FileReader();
@@ -447,8 +523,8 @@ document.getElementById("avf").addEventListener("change",function(e){
       var N=256,c=document.createElement("canvas");c.width=c.height=N;
       var ctx=c.getContext("2d"),s=Math.min(img.width,img.height);
       ctx.drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,N,N);
-      try{localStorage.setItem(AKEY,c.toDataURL("image/jpeg",0.85))}catch(err){alert("Could not save that photo. Try a smaller one.")}
-      paintAv();
+      try{localStorage.setItem(AKEY,c.toDataURL("image/jpeg",0.85));ok("Profile photo updated")}catch(err){alert("Could not save that photo. Try a smaller one.")}
+      paintAv();fillSettings();
     };
     img.onerror=function(){alert("That file could not be read as an image.")};
     img.src=rd.result;
@@ -479,7 +555,7 @@ document.getElementById("tgl").addEventListener("click",function(){
 applyTheme(curTheme());
 /* ---- Account + cloud sync (Supabase) ---- */
 var SBU="https://inzldvbijatrbiyhhsog.supabase.co",SBK="sb_publishable_fPn7lGAZNDh2315tV_dPpw_kVJs4PMB",SKEY="timely.session",LKEY="timely.linked";
-var sess=null,syncing=false,stat="",pendingRemote=null;
+var sess=null,syncing=false,stat="",pendingRemote=null,manualSync=false,lockUntil=0,fails=[],pendingDob="";
 try{sess=JSON.parse(localStorage.getItem(SKEY)||"null")}catch(e){}
 function saveSess(x){sess=x;try{if(x)localStorage.setItem(SKEY,JSON.stringify(x));else localStorage.removeItem(SKEY)}catch(e){}}
 function linked(){try{return !!sess&&localStorage.getItem(LKEY)===sess.user.id}catch(e){return false}}
@@ -509,16 +585,17 @@ function sbRest(method,qs,body,prefer,tbl){
 }
 function pullCloud(){return sbRest("GET","?select=data&user_id=eq."+sess.user.id)}
 var lastSynced=0;
-function pushNow(){var snap=JSON.parse(JSON.stringify(S)),u=S.updated||0;return sbRest("POST","?on_conflict=user_id",{user_id:sess.user.id,data:snap,updated_at:new Date().toISOString()},"resolution=merge-duplicates,return=minimal").then(function(r){lastSynced=Math.max(lastSynced,u);return r})}
-function setMsg(t){["amsg","gmsg"].forEach(function(i){var m=document.getElementById(i);if(m)m.textContent=t||""})}
+function pushNow(){if(!sess)return Promise.reject(new Error("signed out"));var snap=JSON.parse(JSON.stringify(S)),u=S.updated||0;return sbRest("POST","?on_conflict=user_id",{user_id:sess.user.id,data:snap,updated_at:new Date().toISOString()},"resolution=merge-duplicates,return=minimal").then(function(r){lastSynced=Math.max(lastSynced,u);return r})}
+function setMsg(t){["amsg","gmsg","bmsg"].forEach(function(i){var m=document.getElementById(i);if(m)m.textContent=t||""})}
 function setStat(s,detail){stat=s;if(detail!==undefined)setMsg(detail);paintAcct()}
 function paintAcct(){
   document.getElementById("acct").textContent=sess?(stat||"Signed in"):"Sign in to sync";
   document.getElementById("gate").hidden=!!sess;
   document.documentElement.toggleAttribute("data-auth",!!sess);
-  document.querySelector("main").inert=!sess;
+  document.querySelector("main").inert=!sess||!document.getElementById("settings").hidden;
   document.getElementById("authin").hidden=!sess;
   document.getElementById("aemail").textContent=sess?sess.user.email:"";
+  if(!sess&&!document.getElementById("settings").hidden)closeSettings();
 }
 function syncErr(e){
   if(e&&e.name==="TypeError")return setStat("Offline","You are offline. Changes will sync when you are back online.");
@@ -527,9 +604,9 @@ function syncErr(e){
 }
 var pushT=null;
 function pushCloud(){
-  if(!sess||!linked())return;
+  if(!sess||!linked()||!S.dob)return;
   clearTimeout(pushT);setStat("Syncing\u2026","");
-  pushT=setTimeout(function(){pushNow().then(function(){setStat("Synced","")}).catch(syncErr)},800);
+  pushT=setTimeout(function(){if(!sess||!S.dob)return;pushNow().then(function(){setStat("Synced","")}).catch(syncErr)},800);
 }
 function syncNow(){
   if(!sess||syncing)return;
@@ -537,15 +614,15 @@ function syncNow(){
   pullCloud().then(function(rows){
     var r=rows&&rows[0]&&rows[0].data;
     if(!linked()){
-      if(!valid(r)){setLinked();return pushNow().then(function(){setStat("Synced","")})}
+      if(!valid(r)){if(!S.dob)return;setLinked();return pushNow().then(function(){setStat("Synced","")})}
       if(!hasData()){setLinked();adopt(r);render();setStat("Synced","");return}
       pendingRemote=r;document.getElementById("achoice").hidden=false;document.getElementById("authp").hidden=false;
       setStat("Choose data","");return;
     }
     if(valid(r)&&(r.updated||0)>(S.updated||0)){adopt(r);setStat("Synced","")}
-    else if(!valid(r)||(S.updated||0)>(r.updated||0)){return pushNow().then(function(){setStat("Synced","")})}
+    else if(S.dob&&(!valid(r)||(S.updated||0)>(r.updated||0))){return pushNow().then(function(){setStat("Synced","")})}
     else{lastSynced=S.updated||0;setStat("Synced","")}
-  }).catch(syncErr).then(function(){syncing=false;syncedOnce=true;maybeAskName()});
+  }).catch(syncErr).then(function(){syncing=false;syncedOnce=true;if(manualSync&&stat==="Synced")ok("All synced");manualSync=false;maybeAskName()});
 }
 function authErr(e){
   var m=(e&&e.message)||"";
@@ -578,33 +655,41 @@ window.__tsRender=renderTs;
 if(window.__tsReady||window.turnstile)renderTs();
 setTimeout(function(){if(!sess&&tsId===null)setMsg("The security check could not load. Reload the page or continue with Google.")},9000);
 function creds(){
+  if(Date.now()<lockUntil){setMsg("Too many attempts. Try again in "+Math.ceil((lockUntil-Date.now())/1000)+" seconds.");return null}
   var em=document.getElementById("aem").value.trim(),pw=document.getElementById("apw").value;
   if(!em||pw.length<6){setMsg("Enter your email and a password of at least 6 characters.");return null}
   var c={email:em,password:pw};
   if(TSK){if(!tsTok){setMsg("Please wait a moment for the security check to finish, then try again.");return null}c.gotrue_meta_security={captcha_token:tsTok}}
   return c;
 }
-function authDone(j){saveSess(toSess(j));document.getElementById("apw").value="";setMsg("");tab="today";editId=null;render();paintAcct();syncNow()}
-document.getElementById("acct").addEventListener("click",function(){var p=document.getElementById("authp");p.hidden=!p.hidden;paintAcct()});
+function authDone(j){saveSess(toSess(j));document.getElementById("apw").value="";setMsg("");tab="today";editId=null;if(pendingDob){S.dob=pendingDob;pendingDob="";save()}render();paintAcct();ok("Signed in");syncNow()}
+document.getElementById("acct").addEventListener("click",function(){manualSync=true;syncNow()});
 document.getElementById("acx2").addEventListener("click",function(){document.getElementById("authp").hidden=true});
-document.getElementById("asi").addEventListener("click",function(){var c=creds();if(!c)return;setMsg("Signing in\u2026");sbAuth("token?grant_type=password",c).then(function(j){resetTs();return j},function(e){resetTs();throw e}).then(authDone).catch(function(e){setMsg(authErr(e))})});
-document.getElementById("asu").addEventListener("click",function(){var c=creds();if(!c)return;setMsg("Creating account\u2026");sbAuth("signup",c).then(function(j){resetTs();return j},function(e){resetTs();throw e}).then(function(j){if(j.access_token&&j.user)authDone(j);else setMsg("Account created. Check your email to confirm it, then tap Sign in.")}).catch(function(e){setMsg(authErr(e))})});
-document.getElementById("apw").addEventListener("keydown",function(e){if(e.key==="Enter")document.getElementById("asi").click()});
-document.getElementById("asn").addEventListener("click",syncNow);
+document.getElementById("asi").addEventListener("click",function(){var c=creds();if(!c)return;setMsg("Signing in\u2026");sbAuth("token?grant_type=password",c).then(function(j){resetTs();return j},function(e){resetTs();throw e}).then(authDone).catch(function(e){noteFail();setMsg(authErr(e))})});
+document.getElementById("asu").addEventListener("click",function(){
+  var d=document.getElementById("adob").value,ck=checkDob(d);
+  if(ck.under){document.getElementById("apw").value="";document.getElementById("adob").value="";showBlocked();return}
+  if(ck.err){setMsg(ck.err);return}
+  var c=creds();if(!c)return;
+  setMsg("Creating account\u2026");
+  sbAuth("signup",c).then(function(j){resetTs();return j},function(e){resetTs();throw e}).then(function(j){if(j.access_token&&j.user){pendingDob=d;authDone(j)}else setMsg("Account created. Check your email to confirm it, then tap Sign in.")}).catch(function(e){noteFail();setMsg(authErr(e))});
+});
+document.getElementById("apw").addEventListener("keydown",function(e){if(e.key==="Enter")document.getElementById(signupMode?"asu":"asi").click()});
 function clearLocal(){
-  S={goals:[],school:[],errands:[],name:"",updated:0};
+  S={goals:[],school:[],errands:[],name:"",dob:"",updated:0};
   try{localStorage.removeItem(KEY);localStorage.removeItem(AKEY)}catch(e){}
   idbSet("state",S);tab="today";editId=null;render();paintAv();paintHero();
 }
 var forceOut=false,forceT=null;
 function finishSignOut(){
+  clearTimeout(pushT);
   var tok=sess&&sess.access_token;
   pushOff(tok);var R0=loadR();R0.on=false;R0.push=false;saveR(R0);paintR();
   try{fetch(SBU+"/auth/v1/logout",{method:"POST",headers:sbHeaders(tok)}).catch(function(){})}catch(e){}
   clearLocal();saveSess(null);try{localStorage.removeItem(LKEY)}catch(e){}
   stat="";forceOut=false;clearTimeout(forceT);lastSynced=0;
-  document.getElementById("achoice").hidden=true;document.getElementById("authp").hidden=true;
-  paintAcct();setMsg("");
+  document.getElementById("achoice").hidden=true;document.getElementById("authp").hidden=true;document.getElementById("byeov").hidden=true;
+  paintAcct();setMsg("");ok("Signed out");
 }
 document.getElementById("aso").addEventListener("click",function(){
   if(forceOut){finishSignOut();return}
@@ -639,13 +724,14 @@ function openName(edit){
   setTimeout(function(){i.focus()},50);
 }
 function maybeAskName(){
-  if(!sess||S.name||!document.getElementById("nameov").hidden)return;
-  if(sess&&!syncedOnce)return;
+  if(!sess||!syncedOnce)return;
+  if(!S.dob){if(document.getElementById("dobov").hidden&&document.getElementById("blockov").hidden)openDob();return}
+  if(S.name||!document.getElementById("nameov").hidden)return;
   openName(false);
 }
 function saveName(){
   var v=document.getElementById("nminp").value.trim().slice(0,30);if(!v)return;
-  S.name=v;save();paintHero();document.getElementById("nameov").hidden=true;
+  S.name=v;save();paintHero();document.getElementById("nameov").hidden=true;fillSettings();ok("Name saved");
 }
 document.getElementById("nmok").addEventListener("click",saveName);
 document.getElementById("nminp").addEventListener("keydown",function(e){if(e.key==="Enter")saveName()});
@@ -666,19 +752,180 @@ function handleOAuth(){
   var exp=parseInt(p.get("expires_at"),10)||Math.floor(Date.now()/1000)+(parseInt(p.get("expires_in"),10)||3600);
   return fetch(SBU+"/auth/v1/user",{headers:sbHeaders(at)}).then(function(r){return r.json()}).then(function(u){
     if(!u||!u.id)throw new Error((u&&(u.msg||u.message))||"Sign-in failed");
-    saveSess({access_token:at,refresh_token:p.get("refresh_token"),expires_at:exp,user:{id:u.id,email:u.email}});
+    saveSess({access_token:at,refresh_token:p.get("refresh_token"),expires_at:exp,user:{id:u.id,email:u.email}});ok("Signed in");
     var m=u.user_metadata||{};suggestName=String(m.full_name||m.name||"").split(" ")[0]||"";
   }).catch(function(e){setMsg(authErr(e))});
 }
 paintHero();
 handleOAuth().then(function(){if(sess)setMsg("");paintAcct();syncNow();refreshSub()});
+/* ---- Success messages, install banner, settings, reviews, age check, delete account ---- */
+function ok(t){toast(t,"")}
+function ageOf(d){
+  var b=new Date(d+"T00:00:00");if(isNaN(b.getTime()))return -1;
+  var n=new Date(),a=n.getFullYear()-b.getFullYear(),m=n.getMonth()-b.getMonth();
+  if(m<0||(m===0&&n.getDate()<b.getDate()))a--;
+  return a;
+}
+function checkDob(d){
+  if(!d)return {err:"Enter your date of birth."};
+  var a=ageOf(d);
+  if(a<0||a>120||d>todayIso())return {err:"Enter a valid date of birth."};
+  if(a<13)return {err:"under",under:true};
+  return {ok:true};
+}
+function noteFail(){var n=Date.now();fails=fails.filter(function(t){return n-t<300000});fails.push(n);if(fails.length>=5){lockUntil=n+60000;fails=[]}}
+var $id=function(i){return document.getElementById(i)};
+$id("adob").max=todayIso();$id("dobinp").max=todayIso();
+
+/* gate: sign in or create account */
+var signupMode=false;
+function paintMode(){
+  $id("dobbox").hidden=!signupMode;$id("asu").hidden=!signupMode;$id("asi").hidden=signupMode;
+  $id("amode").textContent=signupMode?"Already have an account? Sign in":"New here? Create an account";
+  $id("apw").setAttribute("autocomplete",signupMode?"new-password":"current-password");
+  setMsg("");
+}
+$id("amode").addEventListener("click",function(){signupMode=!signupMode;paintMode()});
+paintMode();
+
+/* age check */
+function wipeAll(){
+  clearTimeout(pushT);
+  var tok=sess&&sess.access_token;
+  pushOff(tok);var R0=loadR();R0.on=false;R0.push=false;saveR(R0);paintR();
+  clearLocal();saveSess(null);try{localStorage.removeItem(LKEY)}catch(e){}
+  stat="";paintAcct();setMsg("");
+}
+function showBlocked(){$id("dobov").hidden=true;$id("blockov").hidden=false}
+function underage(){
+  $id("dobov").hidden=true;
+  var done=function(){wipeAll();showBlocked()};
+  if(!sess){done();return}
+  token().then(function(t){return fetch(FN+"?action=delete",{method:"POST",headers:{"Authorization":"Bearer "+t,"Content-Type":"application/json"},body:"{}"})}).catch(function(){}).then(done);
+}
+function openDob(){$id("dobinp").value="";$id("dobmsg").textContent="";$id("dobov").hidden=false}
+$id("dobok").addEventListener("click",function(){
+  var d=$id("dobinp").value,c=checkDob(d);
+  if(c.under){underage();return}
+  if(c.err){$id("dobmsg").textContent=c.err;return}
+  S.dob=d;save();$id("dobov").hidden=true;fillSettings();syncNow();maybeAskName();
+});
+$id("blockok").addEventListener("click",function(){
+  $id("blockov").hidden=true;$id("adob").value="";$id("aem").value="";$id("apw").value="";signupMode=false;paintMode();
+});
+
+/* install banner */
+var instDeferred=window.__bip||null,INSTK="timely.instdismiss";
+function isStandalone(){return !!(window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches)||window.navigator.standalone===true}
+function isIOS(){return /iphone|ipad|ipod/i.test(navigator.userAgent||"")}
+function instDismissed(){try{var t=parseInt(localStorage.getItem(INSTK),10);return !!t&&Date.now()-t<14*864e5}catch(e){return false}}
+function paintInstall(){
+  var show=!isStandalone()&&!instDismissed()&&(!!instDeferred||isIOS());
+  ["inst","inst2"].forEach(function(id){
+    var el=$id(id);if(!el)return;
+    el.hidden=!show;
+    el.querySelector(".instgo").hidden=!instDeferred;
+    el.querySelector(".insttxt").textContent=instDeferred?"Get the app on your device for faster access and reminders.":"On iPhone, tap the Share button, then Add to Home Screen.";
+  });
+}
+window.__bipCb=function(){instDeferred=window.__bip;paintInstall()};
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();instDeferred=e;paintInstall()});
+window.addEventListener("appinstalled",function(){instDeferred=null;paintInstall();ok("Timely installed")});
+Array.prototype.forEach.call(document.querySelectorAll(".instgo"),function(b){b.addEventListener("click",function(){
+  if(!instDeferred)return;instDeferred.prompt();
+  Promise.resolve(instDeferred.userChoice).then(function(){instDeferred=null;paintInstall()}).catch(function(){});
+})});
+Array.prototype.forEach.call(document.querySelectorAll(".instx"),function(b){b.addEventListener("click",function(){
+  try{localStorage.setItem(INSTK,String(Date.now()))}catch(e){}paintInstall();
+})});
+paintInstall();
+
+/* settings */
+var setEl=$id("settings");
+function fmtDob(d){if(!d)return "Not set";try{return new Date(d+"T00:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})}catch(e){return d}}
+function fillSettings(){
+  $id("setname").textContent=S.name||"Not set";
+  $id("setemail").textContent=sess?sess.user.email:"";
+  $id("setdob").textContent=fmtDob(S.dob);
+  $id("setphx").hidden=$id("avx").hidden;
+}
+function openSettings(){fillSettings();setEl.hidden=false;document.querySelector("main").inert=true;document.body.style.overflow="hidden";loadReviews()}
+function closeSettings(){setEl.hidden=true;document.querySelector("main").inert=!sess;document.body.style.overflow=""}
+$id("setbtn").addEventListener("click",openSettings);
+$id("setback").addEventListener("click",closeSettings);
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!setEl.hidden&&$id("nameov").hidden)closeSettings()});
+$id("setnm").addEventListener("click",function(){openName(true)});
+$id("setph").addEventListener("click",function(){$id("av").click()});
+$id("setphx").addEventListener("click",function(){$id("avx").click()});
+
+/* log out, with a goodbye */
+$id("setout").addEventListener("click",function(){$id("bmsg").textContent="";$id("byeov").hidden=false});
+$id("byestay").addEventListener("click",function(){$id("byeov").hidden=true;forceOut=false;setMsg("")});
+
+/* delete account */
+$id("setdel").addEventListener("click",function(){$id("delinp").value="";$id("deldo").disabled=true;$id("dmsg").textContent="";$id("delov").hidden=false});
+$id("delno").addEventListener("click",function(){$id("delov").hidden=true});
+$id("delinp").addEventListener("input",function(){$id("deldo").disabled=$id("delinp").value.trim()!=="DELETE"});
+$id("deldo").addEventListener("click",function(){
+  if($id("delinp").value.trim()!=="DELETE")return;
+  var btn=$id("deldo");btn.disabled=true;$id("dmsg").textContent="Deleting your account\u2026";
+  token().then(function(t){return fetch(FN+"?action=delete",{method:"POST",headers:{"Authorization":"Bearer "+t,"Content-Type":"application/json"},body:"{}"})}).then(function(r){
+    return r.text().then(function(t){var j=null;try{j=JSON.parse(t)}catch(e){}return {r:r,j:j}});
+  }).then(function(x){
+    if(x.r.ok&&x.j&&x.j.ok){wipeAll();$id("delov").hidden=true;closeSettings();ok("Your account was deleted");return}
+    $id("dmsg").textContent=x.r.status===429?"Too many requests. Please wait a while and try again.":"We could not delete your account (error "+x.r.status+"). Please try again.";
+    btn.disabled=false;
+  }).catch(function(e){
+    $id("dmsg").textContent=e&&e.name==="TypeError"?"You are offline. Reconnect and try again.":"We could not delete your account. Please try again.";
+    btn.disabled=false;
+  });
+});
+
+/* reviews and ratings */
+var rvRating=0,rvBusy=false;
+function paintStars(){
+  Array.prototype.forEach.call(document.querySelectorAll("#stars button"),function(b){
+    var on=parseInt(b.dataset.v,10)<=rvRating;b.classList.toggle("on",on);b.setAttribute("aria-checked",String(parseInt(b.dataset.v,10)===rvRating));
+  });
+}
+Array.prototype.forEach.call(document.querySelectorAll("#stars button"),function(b){b.addEventListener("click",function(){rvRating=parseInt(b.dataset.v,10);paintStars()})});
+function starsText(n){return "\u2605".repeat(n)+"\u2606".repeat(5-n)}
+function loadReviews(){
+  if(!sess)return;
+  sbRest("GET","?select=user_id,name,rating,comment,updated_at&order=updated_at.desc&limit=100",null,null,"reviews").then(function(rows){
+    rows=rows||[];
+    var n=rows.length,sum=rows.reduce(function(a,r){return a+r.rating},0);
+    $id("rvsum").textContent=n?(starsText(Math.round(sum/n))+" "+(sum/n).toFixed(1)+" average from "+n+" review"+(n===1?"":"s")):"No reviews yet. Be the first!";
+    var mine=rows.filter(function(r){return r.user_id===sess.user.id})[0];
+    if(mine){rvRating=mine.rating;$id("rvtxt").value=mine.comment||"";$id("rvgo").textContent="Update review"}else{$id("rvgo").textContent="Submit review"}
+    $id("rvdel").hidden=!mine;paintStars();
+    $id("rvlist").innerHTML=rows.filter(function(r){return r.comment}).slice(0,5).map(function(r){
+      return '<div class="srow rv"><div><b>'+esc(r.name)+'</b> <span class="mute">'+starsText(r.rating)+'</span><div class="note">'+esc(r.comment)+'</div></div></div>';
+    }).join("");
+  }).catch(function(e){
+    $id("rvsum").textContent=(e&&e.status===404)||/PGRST205|reviews/.test((e&&e.message)||"")?"Reviews are not available yet.":"Reviews could not be loaded.";
+  });
+}
+$id("rvgo").addEventListener("click",function(){
+  if(rvBusy)return;
+  if(rvRating<1){$id("rvmsg").textContent="Tap a star to rate Timely first.";return}
+  rvBusy=true;$id("rvgo").disabled=true;$id("rvmsg").textContent="";
+  var row={user_id:sess.user.id,name:(S.name||"A user").slice(0,30),rating:rvRating,comment:$id("rvtxt").value.trim().slice(0,500),updated_at:new Date().toISOString()};
+  sbRest("POST","?on_conflict=user_id",row,"resolution=merge-duplicates,return=minimal","reviews").then(function(){ok("Thanks for your review!");loadReviews()}).catch(function(e){
+    $id("rvmsg").textContent=e&&e.name==="TypeError"?"You are offline. Try again when you are back online.":((e&&e.status===404)?"Reviews are not available yet.":"We could not save your review. Please try again.");
+  }).then(function(){setTimeout(function(){rvBusy=false;$id("rvgo").disabled=false},3000)});
+});
+$id("rvdel").addEventListener("click",function(){
+  sbRest("DELETE","?user_id=eq."+sess.user.id,null,null,"reviews").then(function(){rvRating=0;$id("rvtxt").value="";paintStars();ok("Review removed");loadReviews()}).catch(function(){$id("rvmsg").textContent="We could not remove your review. Please try again."});
+});
+paintStars();
 document.getElementById("exp").addEventListener("click",function(){
   try{
     var blob=new Blob([JSON.stringify(S,null,2)],{type:"application/json"});
     var url=URL.createObjectURL(blob), a=document.createElement("a");
     a.href=url; a.download="timely-backup-"+todayIso()+".json";
     document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(function(){URL.revokeObjectURL(url)},1000);
+    setTimeout(function(){URL.revokeObjectURL(url)},1000);ok("Backup saved");
   }catch(e){alert("Could not save the backup. Try again.");}
 });
 document.getElementById("impb").addEventListener("click",function(){document.getElementById("imp").click()});
@@ -688,7 +935,7 @@ document.getElementById("imp").addEventListener("change",function(e){
   rd.onload=function(){try{
     var r=JSON.parse(rd.result); if(!valid(r))throw 0;
     if(!confirm("Replace everything in the app with this backup?"))return;
-    S={goals:r.goals,school:r.school,errands:r.errands,name:r.name||S.name||""}; save(); render(); paintHero();
+    S={goals:r.goals,school:r.school,errands:r.errands,name:r.name||S.name||"",dob:S.dob||""}; save(); render(); paintHero(); ok("Backup restored");
   }catch(x){alert("That file is not a valid goals backup.");}};
   rd.readAsText(f); e.target.value="";
 });
@@ -762,12 +1009,12 @@ function refreshSub(){
 document.getElementById("rem").addEventListener("click",function(){
   if(!can()){note("This browser does not support notifications.");return}
   var R=loadR();
-  if(R.on){R.on=false;R.push=false;saveR(R);periodic(false);pushOff(sess&&sess.access_token);note("");paintR();return}
+  if(R.on){R.on=false;R.push=false;saveR(R);periodic(false);pushOff(sess&&sess.access_token);note("");paintR();ok("Reminders turned off");return}
   Notification.requestPermission().then(function(p){
     if(p!=="granted"){note("Notifications are blocked. Allow them in the site settings of your browser, then try again.");paintR();return}
     note("Setting up reminders\u2026");R.on=true;R.push=false;R.last=todayIso();saveR(R);paintR();
     pushOn(R).then(function(){R.push=true;saveR(R);periodic(false);paintR();return testPush()}).then(function(r){
-      note(r&&r.ok?"":"Reminders are on, but the test message could not be sent"+(r&&r.err?" ("+String(r.err).slice(0,100)+")":"")+".");
+      if(r&&r.ok){note("");ok("Reminders are on")}else note("Reminders are on, but the test message could not be sent"+(r&&r.err?" ("+String(r.err).slice(0,100)+")":"")+".");
     }).catch(function(e){
       periodic(true);
       var em=String((e&&e.message)||"error");

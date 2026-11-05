@@ -29,3 +29,14 @@ GOOGLE SIGN-IN
 
 PRIVACY POLICY
 - privacy.html must be uploaded next to index.html. Link: https://mzee678.github.io/my-goals/privacy.html
+
+REMINDERS WITH THE APP CLOSED (Supabase)
+- Run supabase/setup.sql in the Supabase SQL Editor.
+- Deploy supabase/reminders.ts as an Edge Function (Verify JWT OFF). The app calls it at /functions/v1/super-action.
+- Run supabase/cron.sql in the SQL Editor to schedule it every 10 minutes.
+
+VERSION 3 (settings, age check, reviews, delete account, rate limiting)
+1. Redeploy supabase/reminders.ts in the Supabase function editor (adds delete account + rate limiting).
+2. Upload index.html, sw.js, privacy.html to GitHub.
+3. Sign in once and enter your date of birth.
+4. Run supabase/setup2.sql in the SQL Editor.
